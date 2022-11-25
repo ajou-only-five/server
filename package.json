@@ -11,6 +11,6 @@
     "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "morgan": "~1.9.1",
-    "oracledb": "^5.5.0"
+    "oracledb": "file:///home/ubuntu/workspace/ajou-only-five/backend/node-oracledb"
   }
 }
