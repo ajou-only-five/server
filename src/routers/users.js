@@ -13,16 +13,19 @@ router.get('/', function (req, res, next) {
 /* 예시입니다 */
 router.get('/sign-up', async function (req, res, next) {
   try {
-    const result = await oracleDbHelper.insert({ table: "test", columns: ["test", "test"], data: ["test", "test"] });
-
-    console.log(result);
+    const result = await oracleDbHelper.insert(
+      {
+        table: "test", 
+        columns: ["test", "test"], 
+        data: ["test", "test"] 
+      }
+    );
 
     if (result.code === 200) {
       return res.status(200).send('user created succeed');
     }
 
     res.status(400).send('client error');
-    // res.status(500).send('server error');
   } catch (e) {
     res.status(500).send('server error');
   }
