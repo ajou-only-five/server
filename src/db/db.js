@@ -1,5 +1,5 @@
-require('dotenv').config({ path: './.env.local' });
-const oracledb = require('oracledb');
+import "../env/env.js";
+import oracledb from 'oracledb';
 
 /**
  * @author Jang Seongho
@@ -20,26 +20,28 @@ const oracledb = require('oracledb');
  * 
  * @throws {'oracledb get connection is failed'} the server fails connect to oracle-db.
  */
-const dbConnector = (async () => {
+
+export const oracleDbConnector = (() => {
     let _connection = null;
 
     const _user = process.env.ORACLE_USER;
     const _password = process.env.ORACLE_PASSWORD;
     const _connectionString = process.env.ORACLE_CONNECTION_STRING;
 
-    try {
-        _connection = await oracledb.getConnection({ user: _user, password: _password, connectionString: _connectionString });
-    } catch (err) {
-        console.error(err);
-    } finally {
-        if (!_connection) {
-            throw 'oracledb get connection is failed';
-        }
-    }
-
     return {
         get connection () {
             return _connection;
+        },
+        init: async () => {
+            try {
+                _connection = await oracledb.getConnection({ user: _user, password: _password, connectionString: _connectionString });
+            } catch (err) {
+                console.error(err);
+            } finally {
+                if (!_connection) {
+                    throw 'oracledb get connection is failed';
+                }
+            }
         },
         isConnected: () => {
             if(_connection === null) {
@@ -51,4 +53,4 @@ const dbConnector = (async () => {
     }
 })();
 
-module.exports = { dbConnector };
+oracleDbConnector.init();

@@ -1,12 +1,31 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+import { oracleDbHelper } from '../db/index.js';
 
-const { dbConnector } = require('../src/db/db.js');
+const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  if(dbConnector.is)
-  res.send('respond with a resource');
+router.get('/', function (req, res, next) {
+  res.status(200).send('test success');
 });
 
-module.exports = router;
+
+/* POST users created. */
+/* 예시입니다 */
+router.get('/sign-up', async function (req, res, next) {
+  try {
+    const result = await oracleDbHelper.insert({ table: "test", columns: ["test", "test"], data: ["test", "test"] });
+
+    console.log(result);
+
+    if (result.code === 200) {
+      return res.status(200).send('user created succeed');
+    }
+
+    res.status(400).send('client error');
+    // res.status(500).send('server error');
+  } catch (e) {
+    res.status(500).send('server error');
+  }
+});
+
+export { router as usersRouter };
