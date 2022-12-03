@@ -4,21 +4,17 @@ import { oracleDbHelper } from "../db/index.js";
 var router = express.Router();
 
 /* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send("follow");
-  next();
-});
 router.get("/", async function (req, res, next) {
   try {
     const result = await oracleDbHelper.search({
-      table: "FRIEND",
-      columns: ["nickname"],
-      data: [req.body.nickname],
+      table: "TODO_ITEM",
+      columns: ["nickname", "title"],
+      data: [req.body.nickname, req.body.title],
     });
     console.log(result);
 
     if (result.code === 200) {
-      return res.status(200).send("user created succeed");
+      return res.status(200).send(result.data);
     }
 
     res.status(400).send("client error");
@@ -27,13 +23,29 @@ router.get("/", async function (req, res, next) {
     res.status(500).send("server error");
   }
 });
-router.get("/request", async function (req, res, next) {
+router.post("/", async function (req, res, next) {
   try {
-    const result = await oracleDbHelper.search({
-      table: "follow",
-      columns: ["test", "test"],
-      data: ["test", "test"],
-    });
+    if (req.body.loop) {
+      const result = await oracleDbHelper.insert({
+        table: "TODO_ITEM",
+        columns: [
+          "title",
+          "text",
+          "is_loop",
+          "day",
+          "start_at",
+          "end_at",
+          "day_of_the_week",
+        ],
+        data: ["test", "test"],
+      });
+    } else {
+      const result = await oracleDbHelper.insert({
+        table: "TODO_ITEM",
+        columns: ["title", "text", "loop"],
+        data: ["test", "test"],
+      });
+    }
     console.log(result);
 
     if (result.code === 200) {
@@ -46,45 +58,7 @@ router.get("/request", async function (req, res, next) {
     res.status(500).send("server error");
   }
 });
-router.post("/request", async function (req, res, next) {
-  try {
-    const result = await oracleDbHelper.update({
-      table: "follow",
-      columns: ["test", "test"],
-      data: ["test", "test"],
-    });
-    console.log(result);
-
-    if (result.code === 200) {
-      return res.status(200).send("user created succeed");
-    }
-
-    res.status(400).send("client error");
-    // res.status(500).send('server error');
-  } catch (e) {
-    res.status(500).send("server error");
-  }
-});
-router.get("/requested", async function (req, res, next) {
-  try {
-    const result = await oracleDbHelper.search({
-      table: "follow",
-      columns: ["test", "test"],
-      data: ["test", "test"],
-    });
-    console.log(result);
-
-    if (result.code === 200) {
-      return res.status(200).send("user created succeed");
-    }
-
-    res.status(400).send("client error");
-    // res.status(500).send('server error');
-  } catch (e) {
-    res.status(500).send("server error");
-  }
-});
-router.post("/requested", async function (req, res, next) {
+router.put("/", async function (req, res, next) {
   try {
     const result = await oracleDbHelper.update({
       table: "follow",
