@@ -1,5 +1,5 @@
-import { TypeChecker } from "../utils/type_check.js";
-import { oracleDbConnector } from "./db.js";
+import { TypeChecker } from "../utils/index.js";
+import { oracleDbHelper } from "./db.js";
 import { DBStatusEnum } from "./db_status.js";
 
 export const oracleDbHelper = (() => {
@@ -61,7 +61,7 @@ export const oracleDbHelper = (() => {
 
     return {
         insert: async ({table, columns, data}) => {
-            if(!oracleDbConnector.isConnected()) {
+            if(!oracleDbHelper.isConnected()) {
                 return {
                     ...DBStatusEnum.notInitialized
                 };
@@ -102,7 +102,6 @@ export const oracleDbHelper = (() => {
 
                 try {
                     // await oracleDbConnector.connection.execute(sql, data);
-
                     return {
                         ...DBStatusEnum.success
                     };
@@ -121,8 +120,6 @@ export const oracleDbHelper = (() => {
 
             sql = `INSERT INTO ${table} ${_generateColumnsString(columns)} VALUES ${_generateDataString(data)}`;
 
-            console.log(sql);
-
             try {
                 // await oracleDbConnector.connection.execute(sql, data);
 
@@ -134,6 +131,100 @@ export const oracleDbHelper = (() => {
                     ...DBStatusEnum.executeError
                 };
             }
-        }
+        },
+        insertMany: async ({table, columns, dataList}) => {
+            if(!oracleDbHelper.isConnected()) {
+                return {
+                    ...DBStatusEnum.notInitialized
+                };
+            }
+
+            let isColumnsNull;
+
+            if (columns === undefined) {
+                isColumnsNull = true;
+            } else {
+                isColumnsNull = false;
+            }   
+
+            if (!TypeChecker.isString(table)) {
+                return {
+                    ...DBStatusEnum.parameterTypeError
+                };
+            }
+
+            if (!isColumnsNull && !Array.isArray(columns)) {
+                return {
+                    ...DBStatusEnum.parameterTypeError
+                };
+            }
+
+            if (!Array.isArray(dataList)) {
+                return {
+                    ...DBStatusEnum.parameterTypeError
+                };
+            }
+
+            if (!Array.isArray(dataList[0])) {
+                return {
+                    ...DBStatusEnum.parameterTypeError
+                };
+            }
+
+            let length = dataList[0].length;
+
+            for(const data of dataList) {
+                if (!Array.isArray(data)) {
+                    return {
+                        ...DBStatusEnum.parameterTypeError
+                    };
+                }
+
+                if (length !== data.length) {
+                    return {
+                        ...DBStatusEnum.parameterLengthError
+                    };
+                }
+            }
+
+            let sql;
+
+            if (isColumnsNull) {
+                sql = `INSERT INTO ${table} VALUES ${_generateDataString(dataList[0])}`;
+
+                console.log(sql);
+
+                try {
+                    // await oracleDbConnector.connection.executeMany(sql, dataList);
+                    return {
+                        ...DBStatusEnum.success
+                    };
+                } catch (e) {
+                    return {
+                        ...DBStatusEnum.executeError
+                    };
+                }
+            }
+
+            if(columns.length !== length) {
+                return {
+                    ...DBStatusEnum.parameterLengthError
+                };
+            }
+
+            sql = `INSERT INTO ${table} ${_generateColumnsString(columns)} VALUES ${_generateDataString(dataList[0])}`;
+
+            try {
+                // await oracleDbConnector.connection.executeMany(sql, dataList);
+
+                return {
+                    ...DBStatusEnum.success
+                };
+            } catch (e) {
+                return {
+                    ...DBStatusEnum.executeError
+                };
+            }
+        },
     };
 })();
