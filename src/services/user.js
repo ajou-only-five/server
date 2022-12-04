@@ -21,7 +21,6 @@ export default {
         }
 
         if (isNaN(disclosure)) {
-            console.log("disclosure", disclosure);
             return { status: false };
         }
 
@@ -56,7 +55,6 @@ export default {
 
         try {
             const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, data);
-            await oracleDbHelper.connection.commit();
             return { status: true, data: result.rows[0] };
         } catch (e) {
             console.log(e);
@@ -74,8 +72,51 @@ export default {
 
         try {
             const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, data);
-            await oracleDbHelper.connection.commit();
             return { status: true, data: result.rows[0] };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    searchUserByNickname: async ({ nickname }) => {
+        if (!TypeChecker.isString(nickname)) {
+            return { status: false };
+        }
+
+        const data = {
+            nickname: nickname
+        };
+
+        try {
+            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNickname(data));
+            return { status: true, data: result.rows };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    searchUserByNicknameBetween: async ({ nickname, start, end }) => {
+        if (!TypeChecker.isString(nickname)) {
+            return { status: false };
+        }
+
+        if (isNaN(start)) {
+            return { status: false };
+        }
+
+        if (isNaN(end)) {
+            return { status: false };
+        }
+
+        const data = {
+            nickname: nickname,
+            start: start,
+            end: end
+        };
+
+        try {
+            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNicknameBetween(data));
+            return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
             return { status: false };

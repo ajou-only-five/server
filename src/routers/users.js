@@ -14,15 +14,33 @@ router.get('/', function (req, res, next) {
 /* POST users created. */
 /* 예시입니다 */
 router.get('/sign-up', async function (req, res, next) {
-  const data = {
-    account: "test1",
-    password: "test@123",
-    nickname: "test1",
-    profile: "default",
-    disclosure: 0,
-  };
+  // const data1 = {
+  //   account: "test1",
+  //   password: "test@123",
+  //   nickname: "test1",
+  //   profile: "default",
+  //   disclosure: 0,
+  // };
+  // const data2 = {
+  //   account: "test2",
+  //   password: "test@123",
+  //   nickname: "test2",
+  //   profile: "default",
+  //   disclosure: 0,
+  // };
+  // const data3 = {
+  //   account: "test3",
+  //   password: "test@123",
+  //   nickname: "test3",
+  //   profile: "default",
+  //   disclosure: 0,
+  // };
 
-  console.log(await UserServices.deleteUserByAccount(data));
+  // await UserServices.createUser(data1);
+  // await UserServices.createUser(data2);
+  // await UserServices.createUser(data3);
+  
+  console.log(await UserServices.searchUserByNicknameBetween({nickname: "test", start: "2", end:"3"}));
 
   return res.status(200).send('user created succeed');
   // try {
