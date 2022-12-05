@@ -1,4 +1,4 @@
-var express = require("express");
+import express from "express";
 import { oracleDbHelper } from "../db/index.js";
 
 var router = express.Router();
@@ -122,4 +122,4 @@ router.delete("/", async function (req, res, next) {
     res.status(500).send("server error");
   }
 });
-module.exports = router;
+export {router as followRouter}
