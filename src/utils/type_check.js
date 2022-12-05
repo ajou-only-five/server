@@ -22,9 +22,9 @@ const isNumber = (object) => {
     return false;
 }
 
-export const TypeChecker = (() => {
+export default (function () {
     return {
         isString: isString,
         isNumber: isNumber,
-    }
+    };
 })();
