@@ -1,6 +1,6 @@
 import "../env/env.js";
-import oracledb from 'oracledb';
-
+import pkg from 'oracledb' ;
+const oracledb = pkg;
 /**
  * @author Jang Seongho
  * 

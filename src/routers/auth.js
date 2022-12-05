@@ -1,4 +1,4 @@
-var express = require("express");
+import express from "express";
 import { oracleDbHelper } from "../db/index.js";
 var router = express.Router();
 
@@ -9,6 +9,9 @@ router.get("/", function (req, res, next) {
 });
 
 router.post("/sign-up", async function (req, res, next) {
+  if(req.session.accountName){ //session이 있으면 
+    return res.status(200).send("이미 회원가입 되어 있습니다.")
+  }
   try {
     const result = await oracleDbHelper.insert({
       table: "Users",
@@ -65,4 +68,4 @@ router.post("/logout", async function (req, res, next) {
     res.status(500).send("server error");
   }
 });
-module.exports = router;
+export {router as authRouter}

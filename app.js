@@ -1,20 +1,21 @@
 import "./src/env/env.js";
 import express from "express";
+import session, { Cookie } from "express-session";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-
+const __dirname = path.resolve();
 //const db_helper = require('./db/db_helper');
-const indexRouter = require("./routers/index");
-const usersRouter = require("./routers/users");
-const todoItemRouter = require("./routers/todoItem");
-const todoItemDoneRouter = require("./routers/todoItemDone");
-const followRouter = require("./routers/follow");
-const searchRouter = require("./routers/search");
-const myInfoRouter = require("./routers/myInfo");
-const todoTitleRouter = require("./routers/todoTitle");
-const authRouter = require("./routers/auth");
-const validRouter = require("./routers/valid");
+import {indexRouter} from  "./src/routers/index.js";
+import {usersRouter} from  "./src/routers/users.js";
+import {todoItemRouter} from "./src/routers/todoItem.js"
+import {todoItemDoneRouter} from "./src/routers/todoItemDone.js";
+import {followRouter} from "./src/routers/follow.js";
+import {searchRouter} from "./src/routers/search.js";
+import {myInfoRouter} from "./src/routers/myInfo.js";
+import {todoTitleRouter} from "./src/routers/todoTitle.js";
+import {authRouter} from "./src/routers/auth.js";
+import {validRouter} from "./src/routers/valid.js";
 const app = express();
 
 app.use(logger("dev"));
@@ -23,24 +24,35 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use((req, res, next) => {
-  res.status(404).send("Not Found");
-});
+
 
 app.listen(3000, function () {
   console.log("Express server is listening");
 });
-
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/todoItem", todoItemRouter);
-app.use("/todoItemDone", todoItemDoneRouter);
-app.use("/follow", followRouter);
-app.use("/myInfo", myInfoRouter);
-app.use("/search", searchRouter);
-app.use("/todoTitle", todoTitleRouter);
-app.use("/valid", validRouter);
-app.use("/auth", authRouter);
+app.use(session({
+  secret:"ajou-only-five",
+  resave:false, //session이 변동 사항이 없어도 저장되는 것을 막음
+  saveUninitialized:false, //아무 내용이 없는 session이 저장되는 것을 막음
+  cookie:1000*60*60, //session 유지 시간 1시간
+}))
+app.get("/api/ss",function(req,res){
+  console.log(req.session)
+  console.log("ss")
+  res.send("ss")
+})
+app.use('/api/', indexRouter);
+app.use('/api/users', usersRouter);
+app.use("/api/todoItem", todoItemRouter);
+app.use("/api/todoItemDone", todoItemDoneRouter);
+app.use("/api/follow", followRouter);
+app.use("/api/myInfo", myInfoRouter);
+app.use("/api/search", searchRouter);
+app.use("/api/todoTitle", todoTitleRouter);
+app.use("/api/valid", validRouter);
+app.use("/api/auth", authRouter);
 /*
  */
-module.exports = app;
+app.use((req, res, next) => {
+  res.status(404).send("Not Found");
+});
+export default app

@@ -6,7 +6,7 @@ const router = express.Router();
 /* GET home page. */
 router.get("/", function (req, res, next) {
   console.log("index");
-  res.render("index", { title: "Express" });
+  res.send("index")
 });
 
-export { router as indexRouter };
+export {router as indexRouter}
