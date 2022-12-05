@@ -1,7 +1,7 @@
 export const DBStatusEnum = {
     success: {
         code: 200,
-        message: "SQL execution is succeed."
+        message: "SQL execution is succeed.",
     },
     parameterTypeError: {
         code: 400,

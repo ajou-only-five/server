@@ -1,6 +1,9 @@
+import oracledb from 'oracledb';
+
 import "../env/env.js";
-import pkg from 'oracledb' ;
-const oracledb = pkg;
+import { TypeChecker } from "../utils/index.js";
+import { DBStatusEnum } from "./db_status.js";
+
 /**
  * @author Jang Seongho
  * 
@@ -8,11 +11,10 @@ const oracledb = pkg;
  * @type {Object}
  * 
  * @description
- * The closure of oracle-db connector.
+ * The oracle db helper
  * 
  * This offers these:
- * 
- * @returns { Object }
+ * @returns { function }
  * * connection: get oracle-db connection.
  * 
  * @returns { bool }
@@ -21,36 +23,46 @@ const oracledb = pkg;
  * @throws {'oracledb get connection is failed'} the server fails connect to oracle-db.
  */
 
-export const oracleDbConnector = (() => {
-    let _connection = null;
+const oracleDbHelper = (function () {
+    const oracleDbHelper = function () { };
 
-    const _user = process.env.ORACLE_USER;
-    const _password = process.env.ORACLE_PASSWORD;
-    const _connectionString = process.env.ORACLE_CONNECTION_STRING;
-
-    return {
-        get connection () {
-            return _connection;
-        },
-        init: async () => {
-            try {
-                _connection = await oracledb.getConnection({ user: _user, password: _password, connectionString: _connectionString });
-            } catch (err) {
-                console.error(err);
-            } finally {
-                if (!_connection) {
-                    throw 'oracledb get connection is failed';
-                }
+    oracleDbHelper.prototype.init = async () => {
+        let connection;
+        try {
+            connection = await oracledb.getConnection({
+                user: process.env.ORACLE_USER,
+                password: process.env.ORACLE_PASSWORD,
+                connectionString: process.env.ORACLE_CONNECTION_STRING,
+            });
+            return connection;
+        } catch (err) {
+            console.error(err);
+        } finally {
+            if (!connection) {
+                console.log(connection);
+                throw 'oracledb get connection is failed';
             }
-        },
-        isConnected: () => {
-            if(_connection === null) {
-                return false;
-            }
-
-            return true;
         }
-    }
+    };
+
+    /**
+     * hello
+     */
+    oracleDbHelper.prototype.isConnected = () => {
+        if (oracleDbHelper.connection === null) {
+            return false;
+        }
+
+        return true;
+    };
+
+    return new oracleDbHelper();
 })();
 
-oracleDbConnector.init();
+oracleDbHelper.init()
+.then((connection) => {
+    oracleDbHelper.connection = connection;
+})
+.catch(console.error);
+
+export default oracleDbHelper;
