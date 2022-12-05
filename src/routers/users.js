@@ -13,18 +13,17 @@ router.get('/', function (req, res, next) {
 
 /* POST users created. */
 /* 예시입니다 */
-router.get('/sign-up', async function (req, res, next) {
+router.post('/sign-up', async function (req, res, next) {
   const data = {
-    account: "test1",
-    password: "test@123",
-    nickname: "test1",
+    account: req.body.accountName,
+    password: req.body.password,
+    nickname: req.body.nickname,
     profile: "default",
     disclosure: 0,
   };
+  let result = await UserServices.createUser(data);
 
-  console.log(await UserServices.deleteUserByAccount(data));
-
-  return res.status(200).send('user created succeed');
+  return result;
   // try {
 
 
