@@ -22,24 +22,26 @@ const isNumber = (object) => {
     return false;
 };
 
-const typeCheckAll = (objectArray) => {
-    if(!Array.isArray(objectArray)) {
+const typeCheckAll = ({objectList, typeList}) => {
+    if(!Array.isArray(objectList)) {
         return false;
     }
 
-    for(const object of objectArray) {
-        if(object.expectedType === undefined) {
+    if(!Array.isArray(typeList)) {
+        return false;
+    }
+
+    if(objectList.length !== typeList.length) {
+        return false;
+    }
+
+    for(let index = 0; index < objectList.length; index++) {
+        if(getType(objectList[index]) !== typeList[index]) {
             return false;
         }
-
-        const type = getType(object);
-
-        if(object.expectedType === type) {
-            return true;
-        }
-
-        return false;
     }
+
+    return true;
 };
 
 export default Object.freeze({

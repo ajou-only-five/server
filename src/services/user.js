@@ -32,23 +32,14 @@ export default Object.freeze({
      * ```
      */
     createUser: async ({ account, password, nickname, profile, disclosure }) => {
-        if (!TypeChecker.isString(account)) {
-            return { status: false };
-        }
+        const typeCheckData = [
+            [account, password, nickname, profile, disclosure],
+            ['String', 'String', 'String', 'String', 'Number']
+        ];
 
-        if (!TypeChecker.isString(password)) {
-            return { status: false };
-        }
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!TypeChecker.isString(nickname)) {
-            return { status: false };
-        }
-
-        if (!TypeChecker.isString(profile)) {
-            return { status: false };
-        }
-
-        if (isNaN(disclosure)) {
+        if (!typeCheckResult) {
             return { status: false };
         }
 
@@ -285,15 +276,14 @@ export default Object.freeze({
      * ```
      */
     searchUserByNicknameBetween: async ({ nickname, start, end }) => {
-        if (!TypeChecker.isString(nickname)) {
-            return { status: false };
-        }
+        const typeCheckData = [
+            [nickname, start, end, profile, disclosure],
+            ['String', 'Number', 'Number']
+        ];
 
-        if (isNaN(start)) {
-            return { status: false };
-        }
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (isNaN(end)) {
+        if (!typeCheckResult) {
             return { status: false };
         }
 
@@ -315,16 +305,13 @@ export default Object.freeze({
      * @namedparam
      * @param { Object } data - 유저 데이터
      * @property { String } account - data.account, 유저 계정
-     * @property { String } password - data.password, 유저 비밀번호
-     * @property { String } nickname - data.nickname, 유저 닉네임
-     * @property { String } profile - data.profile, 유저 프로필
-     * @property { Number } disclosure - data.disclosure, 유저 정보 공개 범위
+     * @property { String } password - data.password, 유저 닉네임
      * 
      * @return { Object } 
      * @property { Boolean } status
      * 
      * @description
-     * 해당 계정을 가지고 있는 유저의 정보를 업데이트 합니다.
+     * 해당 계정을 가지고 있는 유저의 비밀번호를 업데이트 합니다.
      * 
      * ```js
      * // 해당 유저의 정보를 업데이트 하고, 해당 정보를 DB에 저장했을 경우
@@ -336,24 +323,113 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    updateUserByAccount: async ({ account, password, nickname, profile, disclosure }) => {
-        if (!TypeChecker.isString(account)) {
+    updatePasswordByAccount: async ({ account, password }) => {
+        const typeCheckData = [
+            [account, password],
+            ['String', 'String']
+        ];
+
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
+
+        if (!typeCheckResult) {
             return { status: false };
         }
 
-        if (!TypeChecker.isString(password)) {
+        const data = [
+            password,
+            Date.now(),
+            account,
+        ];
+
+        try {
+            const result = await oracleDbHelper.connection.execute(UserQuery.updatePasswordByAccount, data);
+            await oracleDbHelper.connection.commit();
+            return { status: true, data: result };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data - 유저 데이터
+     * @property { String } account - data.account, 유저 계정
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * 
+     * @description
+     * 해당 계정을 가지고 있는 유저의 닉네임을 업데이트 합니다.
+     * 
+     * ```js
+     * // 해당 유저의 정보를 업데이트 하고, 해당 정보를 DB에 저장했을 경우
+     * { status : true }
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 유저 업데이트가 완료되지 않았을 경우
+     * // 해당 정보가 DB에 저장되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+    updateNicknameByAccount: async ({ account, nickname }) => {
+        const typeCheckData = [
+            [account, nickname],
+            ['String', 'String']
+        ];
+
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
+
+        if (!typeCheckResult) {
             return { status: false };
         }
 
-        if (!TypeChecker.isString(nickname)) {
+        const data = [
+            nickname,
+            Date.now(),
+            account,
+        ];
+
+        try {
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateNicknameByAccount, data);
+            await oracleDbHelper.connection.commit();
+            return { status: true, data: result };
+        } catch (e) {
+            console.log(e);
             return { status: false };
         }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data - 유저 데이터
+     * @property { String } account - data.account, 유저 계정
+     * @property { String } profile - data.profile, 유저 프로필
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * 
+     * @description
+     * 해당 계정을 가지고 있는 유저의 프로필을 업데이트 합니다.
+     * 
+     * ```js
+     * // 해당 유저의 정보를 업데이트 하고, 해당 정보를 DB에 저장했을 경우
+     * { status : true }
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 유저 업데이트가 완료되지 않았을 경우
+     * // 해당 정보가 DB에 저장되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+    updateProfileByAccount: async ({ account, profile }) => {
+        const typeCheckData = [
+            [account, profile],
+            ['String', 'String']
+        ];
 
-        if (!TypeChecker.isString(profile)) {
-            return { status: false };
-        }
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (isNaN(disclosure)) {
+        if (!typeCheckResult) {
             return { status: false };
         }
 
@@ -378,18 +454,13 @@ export default Object.freeze({
      * @namedparam
      * @param { Object } data - 유저 데이터
      * @property { String } account - data.account, 유저 계정
-     * @property { String } password - data.password, 유저 비밀번호
-     * @property { String } nickname - data.nickname, 유저 닉네임
-     * @property { String } profile - data.profile, 유저 프로필
-     * @property { Number } disclosure - data.disclosure, 유저 정보 공개 범위
-     * 
+     * @property { Number } disclosure - data.disclosure, 유저 프로필
      * 
      * @return { Object } 
      * @property { Boolean } status
      * 
      * @description
-     * 
-     * 해당 닉네임을 가지고 있는 유저의 정보를 업데이트 합니다.
+     * 해당 계정을 가지고 있는 유저의 공개범위를 업데이트 합니다.
      * 
      * ```js
      * // 해당 유저의 정보를 업데이트 하고, 해당 정보를 DB에 저장했을 경우
@@ -401,37 +472,26 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    updateUserByNickname: async ({ account, password, nickname, profile, disclosure }) => {
-        if (!TypeChecker.isString(account)) {
-            return { status: false };
-        }
+     updateDisclosureByAccount: async ({ account, disclosure }) => {
+        const typeCheckData = [
+            [account, disclosure],
+            ['String', 'String']
+        ];
 
-        if (!TypeChecker.isString(password)) {
-            return { status: false };
-        }
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!TypeChecker.isString(nickname)) {
-            return { status: false };
-        }
-
-        if (!TypeChecker.isString(profile)) {
-            return { status: false };
-        }
-
-        if (isNaN(disclosure)) {
+        if (!typeCheckResult) {
             return { status: false };
         }
 
         const data = [
-            nickname,
-            profile,
             disclosure,
             Date.now(),
-            nickname,
+            account,
         ];
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updateUserByNickname, data);
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateDisclosureByAccount, data);
             await oracleDbHelper.connection.commit();
             return { status: true, data: result };
         } catch (e) {
