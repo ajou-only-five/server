@@ -1,18 +1,11 @@
 import oracleDbHelper from '../db/index.js';
-import { TypeChecker } from '../utils/index.js';
+import TypeChecker from '../utils/index.js';
 import UserQuery from '../query/user.js';
 
 /**
  * The user services for CRUD.
  * 
  * @typedef { Object } UserServices
- * 
- * @description
- * + create - 유저 1명 생성
- * + find - 유저 1명 검색
- * + search - 유저 여러 명 검색
- * + update - 유저 1명 정보 업데이트
- * + delete - 유저 1명 삭제
  */
 export default Object.freeze({
     /**
@@ -320,7 +313,7 @@ export default Object.freeze({
     },
     /**
      * @namedparam
-     * @param { Obejct } data - 유저 데이터
+     * @param { Object } data - 유저 데이터
      * @property { String } account - data.account, 유저 계정
      * @property { String } password - data.password, 유저 비밀번호
      * @property { String } nickname - data.nickname, 유저 닉네임
