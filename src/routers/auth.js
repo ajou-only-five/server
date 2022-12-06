@@ -12,13 +12,13 @@ router.get("/", function (req, res, next) {
 });
 
 router.post("/sign-up", async function (req, res, next) { //회원가입
-  const data = {
-    account: req.body.accountName,
-    password: req.body.password,
-    nickname: req.body.nickname,
-    profile: "default",
-    disclosure: 0,
-  };
+  const data = [
+    req.body.accountName,
+    req.body.password,
+    req.body.nickname,
+    "default",
+    0,
+  ];
   try{
     let result = await UserServices.createUser(data);
     if(result.status){
@@ -37,9 +37,9 @@ router.post("/sign-up", async function (req, res, next) { //회원가입
   
 });
 router.post("/login", async function (req, res, next) {
-  const data={
-    account:req.body.accountName,
-  }
+  const data=[
+    req.body.accountName,
+  ]
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){//정보가 있으면 세션에 저장.

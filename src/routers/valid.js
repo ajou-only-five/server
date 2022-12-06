@@ -9,9 +9,9 @@ router.get("/", function (req, res, next) {
   next();
 });
 router.post("/accountName/exists",async function(req,res,next){
-  const data = {
-    accunt:req.body.accountName
-  }
+  const data = [
+    req.body.accountName
+  ]
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){
@@ -36,9 +36,9 @@ router.post("/accountName/exists",async function(req,res,next){
   }
 })
 router.post("/nickname/exists",async function(req,res,next){
-  const data = {
-    nickname:req.body.nickname
-  }
+  const data = [
+    req.body.nickname
+  ]
   try{
     let result = await UserServices.findUserByNickname(data)
     if(result.status){
