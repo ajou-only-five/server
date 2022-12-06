@@ -1,4 +1,4 @@
-export default {
+const UserQuery = {
     createUser: `INSERT INTO USERS VALUES (user_pk_seq.NEXTVAL, :2, :3, :4, :5, :6, :7, :8)`,
     findUserByAccount: `SELECT * FROM USERS WHERE account = :account ORDER BY nickname`,
     findUserByNickname: `SELECT * FROM USERS WHERE nickname = :nickname ORDER BY nickname`,
@@ -9,3 +9,7 @@ export default {
     deleteUserByAccount: `DELETE FROM USERS WHERE account = :account`, 
     deleteUserByNickname: `DELETE FROM USERS WHERE nickname = :nickname`, 
 };
+
+Object.freeze(UserQuery);
+
+export default UserQuery;
