@@ -5,7 +5,7 @@ import UserQuery from '../query/user.js';
 /**
  * The user services for CRUD.
  * 
- * @type { Object }
+ * @typedef { Object } UserServices
  * 
  * @description
  * + create - 유저 1명 생성
@@ -14,16 +14,20 @@ import UserQuery from '../query/user.js';
  * + update - 유저 1명 정보 업데이트
  * + delete - 유저 1명 삭제
  */
-const UserServices = {
+export default Object.freeze({
     /**
      * @namedparam
-     * @param { String } account - 유저 계정
-     * @param { String } password - 유저 비밀번호
-     * @param { String } nickname - 유저 닉네임
-     * @param { String } profile - 유저 프로필
-     * @param { Number } disclosure - 유저 정보 공개 범위
+     * @param { Object } data - 유저 객체
+     * @property { String } account - data.account, 유저 계정
+     * @property { String } password - data.password, 유저 비밀번호
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * @property { String } profile - data.profile, 유저 프로필
+     * @property { Number } disclosure - data.disclosure, 유저 정보 공개 범위
      * 
      * @return { Object } 
+     * @property { Boolean } status
+     * 
+     * @description
      * ```js
      * // 유저 생성이 정상적으로 완료되고, 해당 정보가 DB에 저장 됐을 경우
      * { status : true} 
@@ -76,12 +80,15 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } account - 유저 계정
-     * 
-     * @description
-     * 유저를 1명 찾을 때 사용하는 함수입니다.
+     * @param { Object } data - 유저 데이터
+     * @property { String } account - data.account, 유저 계정
      * 
      * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<any> } data
+     * 
+     * @description 
+     * 유저를 1명 찾을 때 사용하는 함수입니다.
      * ```js
      * // 유저를 찾았을 때
      * { 
@@ -124,12 +131,15 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } nickname - 유저 닉네임
+     * @param { Object } data - 유저 데이터
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<any> } data
      * 
      * @description
      * 유저를 1명 찾을 때 사용하는 함수입니다.
-     * 
-     * @return { Object } 
      * ```js
      * // 유저를 찾았을 때
      * { 
@@ -171,12 +181,16 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } nickname - 유저 닉네임
+     * @param { Object } data - 유저 데이터
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<Array<any>> } data
      * 
      * @description
      * 유저를 여러 명 찾을 때 사용하는 함수입니다. 친구 목록을 검색할 때 쓰시면 됩니다.
      * 
-     * @return { Object } 
      * ```js
      * // 해당 닉네임을 포함하고 있는 모든 유저 목록
      * { 
@@ -230,16 +244,19 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } nickname - 유저 닉네임
-     * @param { Number } start - 시작 index
-     * @param { Number } end - 마지막 index
+     * @param { Object } data - 유저 데이터
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * @property { Number } start - data.start, 시작 index
+     * @property { Number } end - data.end, 마지막 index
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<Array<any>> } data
      * 
      * @description
-     * 
      * 해당 닉네임을 포함하고 있는 유저 목록 중, 일부분만 가져오고 싶을 때 사용합니다.
      * 주의해야할 점은 시작 index는 1부터 입력하셔야 합니다. 0이 아닙니다.
      * 
-     * @return { Object } 
      * ```js
      * // 해당 닉네임을 포함하고 있는 유저 목록 중, 1번부터 2번 유저까지 가져올 때
      * { 
@@ -303,17 +320,19 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } account - 유저 계정
-     * @param { String } password - 유저 비밀번호
-     * @param { String } nickname - 유저 닉네임
-     * @param { String } profile - 유저 프로필
-     * @param { Number } disclosure - 유저 정보 공개 범위
-     * 
-     * @description
-     * 
-     * 해당 계정을 가지고 있는 유저의 정보를 업데이트 합니다.
+     * @param { Obejct } data - 유저 데이터
+     * @property { String } account - data.account, 유저 계정
+     * @property { String } password - data.password, 유저 비밀번호
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * @property { String } profile - data.profile, 유저 프로필
+     * @property { Number } disclosure - data.disclosure, 유저 정보 공개 범위
      * 
      * @return { Object } 
+     * @property { Boolean } status
+     * 
+     * @description
+     * 해당 계정을 가지고 있는 유저의 정보를 업데이트 합니다.
+     * 
      * ```js
      * // 해당 유저의 정보를 업데이트 하고, 해당 정보를 DB에 저장했을 경우
      * { status : true }
@@ -364,17 +383,21 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } account - 유저 계정
-     * @param { String } password - 유저 비밀번호
-     * @param { String } nickname - 유저 닉네임
-     * @param { String } profile - 유저 프로필
-     * @param { Number } disclosure - 유저 정보 공개 범위
+     * @param { Object } data - 유저 데이터
+     * @property { String } account - data.account, 유저 계정
+     * @property { String } password - data.password, 유저 비밀번호
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * @property { String } profile - data.profile, 유저 프로필
+     * @property { Number } disclosure - data.disclosure, 유저 정보 공개 범위
+     * 
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
      * 
      * @description
      * 
      * 해당 닉네임을 가지고 있는 유저의 정보를 업데이트 합니다.
      * 
-     * @return { Object } 
      * ```js
      * // 해당 유저의 정보를 업데이트 하고, 해당 정보를 DB에 저장했을 경우
      * { status : true }
@@ -425,13 +448,16 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } account - 유저 계정
+     * @param { Object } data - 유저 데이터
+     * @property { String } account - data.account, 유저 계정
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
      * 
      * @description
      * 
      * 해당 계정을 가지고 있는 유저의 정보를 삭제 합니다.
      * 
-     * @return { Object } 
      * ```js
      * // 해당 유저의 정보를 삭제 하고, 해당 정보를 DB에 저장했을 경우
      * { status : true }
@@ -462,13 +488,16 @@ const UserServices = {
     },
     /**
      * @namedparam
-     * @param { String } nickname - 유저 닉네임
+     * @param { Object } data - 유저 데이터
+     * @property { String } nickname - data.nickname, 유저 닉네임
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
      * 
      * @description
      * 
      * 해당 계정을 가지고 있는 유저의 정보를 삭제 합니다.
      * 
-     * @return { Object } 
      * ```js
      * // 해당 유저의 정보를 삭제 하고, 해당 정보를 DB에 저장했을 경우
      * { status : true }
@@ -497,8 +526,4 @@ const UserServices = {
             return { status: false };
         }
     },
-}
-
-Object.freeze(UserServices);
-
-export default UserServices;
+});
