@@ -4,7 +4,7 @@ const getType = (target) => {
     }
 
     return Object.prototype.toString.call(target).slice(8, -1);
-}
+};
 
 const isString = (object) => {
     if (getType(object) === "String") {
@@ -12,7 +12,7 @@ const isString = (object) => {
     }
 
     return false;
-}
+};
 
 const isNumber = (object) => {
     if (getType(object) === "Number") {
@@ -20,11 +20,33 @@ const isNumber = (object) => {
     }
 
     return false;
-}
+};
 
-export default (function () {
-    return {
-        isString: isString,
-        isNumber: isNumber,
-    };
-})();
+const typeCheckAll = ({objectList, typeList}) => {
+    if(!Array.isArray(objectList)) {
+        return false;
+    }
+
+    if(!Array.isArray(typeList)) {
+        return false;
+    }
+
+    if(objectList.length !== typeList.length) {
+        return false;
+    }
+
+    for(let index = 0; index < objectList.length; index++) {
+        if(getType(objectList[index]) !== typeList[index]) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+export default Object.freeze({
+    getType: getType,
+    isString: isString,
+    isNumber: isNumber,
+    typeCheckAll: typeCheckAll
+});
