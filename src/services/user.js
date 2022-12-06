@@ -1,5 +1,5 @@
 import oracleDbHelper from '../db/index.js';
-import TypeChecker from '../utils/index.js';
+import { TypeChecker, HashUtils } from '../utils/index.js';
 import UserQuery from '../query/user.js';
 
 /**
@@ -43,9 +43,22 @@ export default Object.freeze({
             return { status: false };
         }
 
+        let _hashedPassword = null;
+
+        try {
+            _hashedPassword = await HashUtils.hashPassword(password);
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+
+        if (_hashedPassword === null) {
+            return { status: false };
+        }
+
         const data = [
             account,
-            password,
+            _hashedPassword,
             nickname,
             profile,
             disclosure,
@@ -335,8 +348,21 @@ export default Object.freeze({
             return { status: false };
         }
 
+        let _hashedPassword = null;
+
+        try {
+            _hashedPassword = await HashUtils.hashPassword(password);
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+
+        if (_hashedPassword === null) {
+            return { status: false };
+        }
+
         const data = [
-            password,
+            _hashedPassword,
             Date.now(),
             account,
         ];
@@ -472,7 +498,7 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-     updateDisclosureByAccount: async ({ account, disclosure }) => {
+    updateDisclosureByAccount: async ({ account, disclosure }) => {
         const typeCheckData = [
             [account, disclosure],
             ['String', 'String']
