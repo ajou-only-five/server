@@ -1,15 +1,15 @@
 import express from "express";
-import TodoTitleServices from '../services/todoTitle.js';
-
+import TodoServices from "../services/todo.js"
 var router = express.Router();
 
 /* GET users listing. */
+/*
 router.get("/", async function (req, res, next) { //todoTitle nickname으로 목록 조회
-  const data={
-    nickname:req.body.nickname
-  }
+  const data=[
+    req.body.nickname
+  ]
   try {
-    let result = await TodoTitleServices.searchTodoTitleByNickname(data)
+    let result = await TodoServices.
     if(result.status){ //찾았을 경우 배열로 데이터를 전달 
       if(result.data.length===0){
         return res.status(400).json({
@@ -31,34 +31,49 @@ router.get("/", async function (req, res, next) { //todoTitle nickname으로 목
       message:"server error"});
   }
 });
+*/
 router.post("/", async function (req, res, next) {
   try {
-    const data = {
-      nickname:req.body.nickname,
-      text:req.body.text,
-      color:req.body.color
+    const data = [
+      req.session.userId,
+      req.body.text,
+      req.body.color
+    ]
+    let result = await TodoServices.createTodoTitle(data)
+    if(result.status){
+      return res.status(200).json({
+        message:"success to create todoTitle"
+      })
+    }
+    else{
+      return res.status(400).json({
+        message:"fail to create todoTitle"
+      })
     }
   } catch (e) {
-    res.status(500).send("server error");
+    res.status(500).json({message:"server error"});
   }
 });
-router.put("/", async function (req, res, next) {
+router.patch("/", async function (req, res, next) {
   try {
-    const result = await oracleDbHelper.update({
-      table: "TODO_TITLE",
-      columns: ["title", "color"],
-      data: [req.body.nickname, req.body.TITLE, req.body.COLOR],
-    });
-    console.log(result);
-
-    if (result.code === 200) {
-      return res.status(200).send("user created succeed");
+    const data = [
+      req.body.title,
+      req.body.color,
+      req.body.titleId
+    ]
+    let result = await TodoServices.updateTodoTitleByTitleId(data)
+    if(result.status){
+      return res.status(200).json({
+        message:"success to update todoTitle"
+      })
     }
-
-    res.status(400).send("client error");
-    // res.status(500).send('server error');
+    else{
+      return res.status(400).json({
+        message:"fail to update todoTitle"
+      })
+    }
   } catch (e) {
-    res.status(500).send("server error");
+    res.status(500).json({message:"server error"});
   }
 });
 router.delete("/", async function (req, res, next) {

@@ -55,6 +55,7 @@ router.post("/login", async function (req, res, next) {
       }
       req.session.account=req.body.accountName;
       req.session.password=req.body.password;
+      req.session.userId=result.data[0];
       return res.status(200).json({
         message:"로그인 성공"
       })
