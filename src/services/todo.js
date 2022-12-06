@@ -5,7 +5,7 @@ import TodoQuery from '../query/todo.js';
 export default {
     /**
      * @namedparam
-     * @param { Object } data - 유저 객체
+     * @param { Object } data
      * @property { Number } userId - data.userId, 유저 index
      * @property { String } title - data.title, todo 제목
      * @property { String } color - data.color, todo 색깔
@@ -26,23 +26,13 @@ export default {
      */
     createTodoTitle: async ({ userId, title, color }) => {
         const typeCheckData = [
-            {
-                value: userId,
-                expectedType: 'Number'
-            },
-            {
-                value: title,
-                expectedType: 'String'
-            },
-            {
-                value: color,
-                expectedType: 'String'
-            },
+            [userId, title, color],
+            ['Number', 'String', 'String'],
         ];
 
-        const typeCheckResult = TypeChecker.typeCheckAll(typeCheckData);
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if(!typeCheckResult) {
+        if (!typeCheckResult) {
             return false;
         }
 
@@ -65,7 +55,7 @@ export default {
     },
     /**
      * @namedparam
-     * @param { Object } data - 유저 객체
+     * @param { Object } data
      * @property { Number } titleId - data.titleId, todo title index
      * @property { String } content - data.content, todo 내용
      * @property { Number? } startAt - data.startAt, todo 시작 시간
@@ -85,25 +75,19 @@ export default {
      * { status : false }
      * ```
      */
-     createTodoItem: async ({ titleId, content, startAt, endAt }) => {
+    createTodoItem: async ({ titleId, content, startAt, endAt }) => {
         let isStartAtNull = null;
         let isEndAtNull = null;
 
         const typeCheckData = [
-            {
-                value: titleId,
-                expectedType: 'Number'
-            },
-            {
-                value: content,
-                expectedType: 'String'
-            },
+            [titleId, content],
+            ['Number', 'String'],
         ];
 
-        const typeCheckResult = TypeChecker.typeCheckAll(typeCheckData);
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if(!typeCheckResult) {
-            return { status: false };
+        if (!typeCheckResult) {
+            return false;
         }
 
         if (startAt === undefined || startAt === null) {
@@ -129,11 +113,11 @@ export default {
         let _startAt = null;
         let _endAt = null;
 
-        if(!isStartAtNull) {
+        if (!isStartAtNull) {
             _startAt = startAt;
         }
 
-        if(!isEndAtNull) {
+        if (!isEndAtNull) {
             _endAt = endAt;
         }
 
@@ -158,7 +142,7 @@ export default {
     },
     /**
      * @namedparam
-     * @param { Object } data - 유저 객체
+     * @param { Object } data
      * @property { String } title - data.title, todo title
      * @property { String } color - data.color, todo color
      * @property { Number } titleId - data.titleId, todo title index
@@ -179,24 +163,14 @@ export default {
      */
     updateTodoTitleByTitleId: async ({ title, color, titleId }) => {
         const typeCheckData = [
-            {
-                value: titleId,
-                expectedType: 'Number'
-            },
-            {
-                value: title,
-                expectedType: 'String'
-            },
-            {
-                value: color,
-                expectedType: 'String'
-            },
+            [titleId, title, color],
+            ['Number', 'String', 'String'],
         ];
 
-        const typeCheckResult = TypeChecker.typeCheckAll(typeCheckData);
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if(!typeCheckResult) {
-            return { status: false };
+        if (!typeCheckResult) {
+            return false;
         }
 
         const data = [
@@ -217,7 +191,7 @@ export default {
     },
     /**
      * @namedparam
-     * @param { Object } data - 유저 객체
+     * @param { Object } data
      * @property { String } content - data.content, todo 내용
      * @property { Number? } startAt - data.startAt, todo 시작 시간
      * @property { Number? } endAt - data.endAt, todo 종료 시간
@@ -243,24 +217,14 @@ export default {
         let isEndAtNull = null;
 
         const typeCheckData = [
-            {
-                value: content,
-                expectedType: 'String'
-            },
-            {
-                value: isChecked,
-                expectedType: 'Number'
-            },
-            {
-                value: itemId,
-                expectedType: 'Number'
-            },
+            [content, isChecked, itemId],
+            ['String', 'Number', 'Number'],
         ];
 
-        const typeCheckResult = TypeChecker.typeCheckAll(typeCheckData);
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if(!typeCheckResult) {
-            return { status: false };
+        if (!typeCheckResult) {
+            return false;
         }
 
         if (!isStartAtNull && !TypeChecker.isNumber(startAt)) {
@@ -275,11 +239,11 @@ export default {
         let _endAt = null;
         let _checkedAt = null;
 
-        if(!isStartAtNull) {
+        if (!isStartAtNull) {
             _startAt = startAt;
         }
 
-        if(!isEndAtNull) {
+        if (!isEndAtNull) {
             _endAt = endAt;
         }
 
@@ -292,13 +256,13 @@ export default {
             return { status: false };
         }
 
-        if(todoItem.length !== 8) {
+        if (todoItem.length !== 8) {
             return { status: false };
         }
 
         const checkedAt = todoItem[8];
 
-        if(checkedAt === null) {
+        if (checkedAt === null) {
             const data = [
                 content,
                 _startAt,
@@ -336,26 +300,26 @@ export default {
             console.log(e);
             return { status: false };
         }
-    },    
-     /**
-     * @namedparam
-     * @param { Object } data
-     * @property { Number } titleId - data.titleId, todo title id
-     * 
-     * @return { Object } 
-     * @property { Boolean } status
-     * 
-     * @description
-     * ```js
-     * // todo title가 정상적으로 삭제되고, 해당 정보가 DB에 저장 됐을 경우
-     * { status : true} 
-     * 
-     * // parameter 타입이 맞지 않을 경우
-     * // todo title이 삭제되지 않았을 경우
-     * // 해당 정보가 DB에 저장되지 않았을 경우
-     * { status : false }
-     * ```
-     */
+    },
+    /**
+    * @namedparam
+    * @param { Object } data
+    * @property { Number } titleId - data.titleId, todo title id
+    * 
+    * @return { Object } 
+    * @property { Boolean } status
+    * 
+    * @description
+    * ```js
+    * // todo title가 정상적으로 삭제되고, 해당 정보가 DB에 저장 됐을 경우
+    * { status : true} 
+    * 
+    * // parameter 타입이 맞지 않을 경우
+    * // todo title이 삭제되지 않았을 경우
+    * // 해당 정보가 DB에 저장되지 않았을 경우
+    * { status : false }
+    * ```
+    */
     deleteTodoTitle: async ({ titleId }) => {
         if (!TypeChecker.isNumber(titleId)) {
             return { status: false };
@@ -374,25 +338,25 @@ export default {
             return { status: false };
         }
     },
-     /**
-     * @namedparam
-     * @param { Object } data
-     * @property { Number } itemId - data.itemId, todo title id
-     * 
-     * @return { Object } 
-     * @property { Boolean } status
-     * 
-     * @description
-     * ```js
-     * // todo item이 정상적으로 삭제되고, 해당 정보가 DB에 저장 됐을 경우
-     * { status : true} 
-     * 
-     * // parameter 타입이 맞지 않을 경우
-     * // todo item이 삭제되지 않았을 경우
-     * // 해당 정보가 DB에 저장되지 않았을 경우
-     * { status : false }
-     * ```
-     */
+    /**
+    * @namedparam
+    * @param { Object } data
+    * @property { Number } itemId - data.itemId, todo title id
+    * 
+    * @return { Object } 
+    * @property { Boolean } status
+    * 
+    * @description
+    * ```js
+    * // todo item이 정상적으로 삭제되고, 해당 정보가 DB에 저장 됐을 경우
+    * { status : true} 
+    * 
+    * // parameter 타입이 맞지 않을 경우
+    * // todo item이 삭제되지 않았을 경우
+    * // 해당 정보가 DB에 저장되지 않았을 경우
+    * { status : false }
+    * ```
+    */
     deleteTodoItem: async ({ itemId }) => {
         if (!TypeChecker.isNumber(itemId)) {
             return { status: false };
