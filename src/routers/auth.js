@@ -11,7 +11,7 @@ router.get("/", function (req, res, next) {
   next();
 });
 
-router.post("/sign-up", async function (req, res, next) {
+router.post("/sign-up", async function (req, res, next) { //회원가입
   const data = {
     account: req.body.accountName,
     password: req.body.password,
@@ -22,18 +22,16 @@ router.post("/sign-up", async function (req, res, next) {
   try{
     let result = await UserServices.createUser(data);
     if(result.status){
-      res.status(200).send({result:true})
+      return res.status(200).json({message:"회원가입 성공"})
     }
     else{
-      res.status(400).send({
-        result:false,
-        message:"couldn't create user"
+      return res.status(400).json({
+        message:"회원가입 실패"
       })
     }
   }catch(err){
-    return res.status(500).send({
-      result:false,
-      message:"DB error"
+    return res.status(500).json({
+      message:"server error"
     })
   }
   
@@ -45,46 +43,49 @@ router.post("/login", async function (req, res, next) {
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){//정보가 있으면 세션에 저장.
+      if(result.data.length===0){
+        return res.status(400).json({
+          message:"해당 account를 가진 user가 없습니다."
+        })
+      }
       if(result.data[2]!==req.body.password){
         return res.status(400).json({
-          result:false,
           message:"비밀번호가 틀립니다.",
         })
       }
       req.session.account=req.body.accountName;
       req.session.password=req.body.password;
-      return res.status(200).json({result:true})
+      return res.status(200).json({
+        message:"로그인 성공"
+      })
     }
     else{
-      return res.status(400).json({
-        result:false,
-        message:"아이디가 존재하지 않습니다."
+      return res.status(500).json({
+        message:"db error"
     })
   }
   }catch(err){
     return res.status(500).json({
-      result:false,
-      message:"DB error"
+      message:"server error"
     })
   }
   
 });
 router.post("/logout", async function (req, res, next) {
   try{
-    if(session.account){ //세션 정보가 있으면 세션을 삭제해줌
+    if(req.session.account){ //세션 정보가 있으면 세션을 삭제해줌
       await req.session.destroy(function(err){
         if(err){
-          return res.status(500).send({result:false});
+          return res.status(400).json({message:"로그아웃 실패(seesion delete error)"});
         }
         else{
-          return res.status(200).json({result:true})
+          return res.status(200).json({message:"로그아웃 성공"})
         }
       })
     }
   }catch(err){
-    res.status(500).json({
-      result:false,
-      message:"Session delete error"
+    res.status(400).json({
+      message:"로그아웃 실패(seesion delete error)"
     })
   }
 })

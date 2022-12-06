@@ -1,25 +1,15 @@
 import express from "express";
-import { oracleDbHelper } from "../db/index.js";
+import UserServices from '../services/user.js';
 
 var router = express.Router();
 
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
+  const data={
+    nickname:req.body.nickname
+  }
   try {
-    const result = await oracleDbHelper.select({
-      table: "TODO_TITLE",
-      where: ["nickname"],
-      data: [req.body.nickname],
-    });
-    console.log(result);
-
-    if (result.code === 200) {
-      return res.status(200).send(result.data);
-      //json incoding
-    }
-
-    res.status(400).send("client error");
-    // res.status(500).send('server error');
+    let result = await
   } catch (e) {
     res.status(500).send("server error");
   }
