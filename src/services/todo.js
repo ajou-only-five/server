@@ -1,5 +1,5 @@
 import oracleDbHelper from '../db/index.js';
-import TypeChecker from '../utils/index.js';
+import { TypeChecker } from '../utils/index.js';
 import TodoQuery from '../query/todo.js';
 
 export default {

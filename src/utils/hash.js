@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 
-const hashPassword = async (password) => {
-    await Promise((resolve, reject) => {
+const hashPassword = async (password) =>
+    new Promise((resolve, reject) => {
         bcrypt.genSalt(process.env.SALT_ROUNDS, (err, salt) => {
             if (err) {
                 console.log(err);
@@ -20,7 +20,7 @@ const hashPassword = async (password) => {
             })
         });
     });
-}
+
 
 export default Object.freeze({
     hashPassword: hashPassword
