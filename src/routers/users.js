@@ -2,6 +2,7 @@ import express from 'express';
 import oracleDbHelper from '../db/index.js';
 import oracledb from 'oracledb';
 import UserServices from '../services/user.js';
+import TodoTitleServices from '../services/todoTitle.js';
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router.get('/', function (req, res, next) {
 
 /* POST users created. */
 /* 예시입니다 */
+<<<<<<< HEAD
 router.post('/sign-up', async function (req, res, next) {
   const data = {
     account: req.body.accountName,
@@ -35,6 +37,9 @@ router.post('/sign-up', async function (req, res, next) {
   // } catch (e) {
   //   res.status(500).send('server error');
   // }
+=======
+router.get('/sign-up', async function (req, res, next) {
+>>>>>>> 8e871a004aa3f423fcfdda83f40383c48db5ba11
 });
 
 export { router as usersRouter };
