@@ -10,8 +10,12 @@ router.get("/", function (req, res, next) {
   next();
 });
 
+<<<<<<< HEAD
 router.post('/sign-up', async function (req, res, next) {
   
+=======
+router.post("/sign-up", async function (req, res, next) {
+>>>>>>> 188668041809d45a6c397e9899864f4ec4e93cb3
   const data = {
     account: req.body.accountName,
     password: req.body.password,
@@ -20,15 +24,23 @@ router.post('/sign-up', async function (req, res, next) {
     disclosure: 0,
   };
   let result = await UserServices.createUser(data);
+<<<<<<< HEAD
   if(result.status){
     res.status(200).send({result:true})
   }
   else{
     res.status(500).send({result:false})
+=======
+  if (result.status) {
+    res.status(200).send("signed success");
+  } else {
+    res.status(500).send("server error");
+>>>>>>> 188668041809d45a6c397e9899864f4ec4e93cb3
   }
   return result;
 });
 router.post("/login", async function (req, res, next) {
+<<<<<<< HEAD
   const data={
     account:req.body.accountName,
   }
@@ -59,3 +71,28 @@ router.post("/logout", async function (req, res, next) {
   }
 })
 export {router as authRouter}
+=======
+  let result = await UserServices.findUserByAccount(req.body.accountName);
+  if (result.status) {
+    //정보가 있으면 세션에 저장.
+    req.session.account = req.body.accountName;
+    req.session.password = req.body.password;
+    return res.status(200).json("true");
+  } else {
+    return res.status(500).json("일치하는 account가 없습니다.");
+  }
+});
+router.post("/logout", async function (req, res, next) {
+  if (req.session.account) {
+    //세션 정보가 있으면 세션을 삭제해줌
+    await req.session.destroy(function (err) {
+      if (err) {
+        return res.status(500).send(false);
+      } else {
+        return res.status(200).send(true);
+      }
+    });
+  }
+});
+export { router as authRouter };
+>>>>>>> 188668041809d45a6c397e9899864f4ec4e93cb3
