@@ -21,34 +21,41 @@ router.post('/sign-up', async function (req, res, next) {
   };
   let result = await UserServices.createUser(data);
   if(result.status){
-    res.status(200).send("signed success")
+    res.status(200).send({result:true})
   }
   else{
-    res.status(500).send("server error")
+    res.status(500).send({result:false})
   }
   return result;
 });
 router.post("/login", async function (req, res, next) {
-  let result = await UserServices.findUserByAccount(req.body.accountName)
+  const data={
+    account:req.body.accountName,
+  }
+  let result = await UserServices.findUserByAccount(data)
   if(result.status){//정보가 있으면 세션에 저장.
     req.session.account=req.body.accountName;
     req.session.password=req.body.password;
-    return res.status(200).json("true")
+    return res.status(200).json({result:true})
   }
   else{
-    return res.status(500).json("일치하는 account가 없습니다.")
+    return res.status(500).json({result:false})
   }
 });
 router.post("/logout", async function (req, res, next) {
-  if(req.session.account){ //세션 정보가 있으면 세션을 삭제해줌
-    await req.session.destroy(function(err){
-      if(err){
-        return res.status(500).send(false);
-      }
-      else{
-        return res.status(200).send(true)
-      }
-    })
+  try{
+    if(session.account){ //세션 정보가 있으면 세션을 삭제해줌
+      await req.session.destroy(function(err){
+        if(err){
+          return res.status(500).send({result:false});
+        }
+        else{
+          return res.status(200).json({result:true})
+        }
+      })
+    }
+  }catch(err){
+    res.status(500).send("error")
   }
-});
+})
 export {router as authRouter}
