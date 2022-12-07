@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 import UserServices from '../services/user.js';
 import TodoServices from '../services/todo.js';
+import FriendServices from '../services/friend.js';
 
 const router = express.Router();
 
@@ -129,6 +130,23 @@ router.get('/todoitem/search', async function (req, res, next) {
 
     res.status(400).json({ status: false });
     return;
+});
+
+router.get('/searchFriend', async function (req, res, next) {
+    try {
+        const result = await FriendServices.deleteUserByAccount({ account: req.query.account });
+
+        if (result.status) {
+            res.status(200).json({ status: true });
+            return;
+        }
+
+        res.status(500).json({ status: false });
+        return;
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ status: false });
+    }
 });
 
 router.delete('/deleteUser', async function (req, res, next) {
