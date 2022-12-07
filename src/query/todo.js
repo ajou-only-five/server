@@ -26,6 +26,10 @@ export default Object.freeze({
     /**
      * @param { Number } titleId
      */
+     findTodoTitle : `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
+    /**
+     * @param { Number } itemId
+     */
     findTodoItem : `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
     /**
      * @param { Number } userId
