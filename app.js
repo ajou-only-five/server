@@ -17,16 +17,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.all('/*', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 app.use('/api', indexRouter);
 app.use('/api/user', usersRouter);
 app.use('/api/dummy', dummyRouter);
 
 app.use((req, res, next) => {
-    res.status(404).send('Not Found');
+  res.status(404).send('Not Found');
 });
 
 app.listen(3000, function () {
-    console.log('Express server is listening');
+  console.log('Express server is listening');
 });
 
 export default app;
