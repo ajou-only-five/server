@@ -29,7 +29,7 @@ export default {
     createTodoTitle: async ({ userId, title, color }) => {
         const typeCheckData = [
             [userId, title, color],
-            ['Number', 'String', 'String'],
+            ['number', 'string', 'string'],
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -94,7 +94,7 @@ export default {
 
         const typeCheckData = [
             [titleId, content],
-            ['Number', 'String'],
+            ['number', 'string'],
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -326,7 +326,7 @@ export default {
     updateTodoTitleByTitleId: async ({ title, color, titleId }) => {
         const typeCheckData = [
             [titleId, title, color],
-            ['Number', 'String', 'String'],
+            ['number', 'string', 'string'],
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -384,7 +384,7 @@ export default {
 
         const typeCheckData = [
             [content, isChecked, itemId],
-            ['String', 'Number', 'Number'],
+            ['string', 'number', 'number'],
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });

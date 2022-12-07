@@ -1,3 +1,4 @@
+import oracledb from 'oracledb';
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker, HashUtils } from '../utils/index.js';
 import UserQuery from '../query/user.js';
@@ -34,7 +35,7 @@ export default Object.freeze({
     createUser: async ({ account, password, nickname, profile, disclosure }) => {
         const typeCheckData = [
             [account, password, nickname, profile, disclosure],
-            ['String', 'String', 'String', 'String', 'Number']
+            ['string', 'string', 'string', 'string', 'number']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -305,7 +306,7 @@ export default Object.freeze({
     searchUserByNicknameBetween: async ({ nickname, start, end }) => {
         const typeCheckData = [
             [nickname, start, end, profile, disclosure],
-            ['String', 'Number', 'Number']
+            ['string', 'number', 'number']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -353,7 +354,7 @@ export default Object.freeze({
     updatePasswordByAccount: async ({ account, password }) => {
         const typeCheckData = [
             [account, password],
-            ['String', 'String']
+            ['string', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -418,7 +419,7 @@ export default Object.freeze({
     updateNicknameByAccount: async ({ account, nickname }) => {
         const typeCheckData = [
             [account, nickname],
-            ['String', 'String']
+            ['string', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -470,7 +471,7 @@ export default Object.freeze({
     updateProfileByAccount: async ({ account, profile }) => {
         const typeCheckData = [
             [account, profile],
-            ['String', 'String']
+            ['string', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -525,7 +526,7 @@ export default Object.freeze({
     updateDisclosureByAccount: async ({ account, disclosure }) => {
         const typeCheckData = [
             [account, disclosure],
-            ['String', 'String']
+            ['string', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
