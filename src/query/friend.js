@@ -14,11 +14,11 @@ export default Object.freeze({
      */
     searchFriendByUserId: `
         SELECT U.id, U.account, U.nickname, U.profile, U.disclosure 
-        FROM USER U, (
+        FROM USERS U, (
             SELECT *
             FROM FRIEND
             WHERE user_id_1 = :userId OR user_id_2 = :userId
-        ) as F
+        ) F
         WHERE (F.user_id_1 = :userId AND U.id IN F.user_id_2) OR (F.user_id_2 = :userId AND U.id IN F.user_id_1)
         ORDER BY nickname ASC, id ASC
         `,

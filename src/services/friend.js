@@ -99,12 +99,9 @@ export default {
             userId
         ];
 
-        const option = {
-            autoCommit: true
-        };
-
         try {
-            const result = await oracleDbHelper.connection.execute(FriendQuery.searchFriendByUserId, bind, option);
+            const result = await oracleDbHelper.connection.execute(FriendQuery.searchFriendByUserId, bind);
+            console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);

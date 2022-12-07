@@ -68,6 +68,84 @@ export default {
         }
     },
     /**
+     * @namedparam
+     * @param { Object } data
+     * @property { Number } userId - data.userId, 현재 유저 index
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<User> } data
+     * 
+     * @description
+     * ```js
+     * // 현재 유저가 친구 추가 요청한 유저 목록 검색이 완료 되었을 경우
+     * { 
+     *  status : true, 
+     *  data: []
+     * } 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 현재 유저가 친구 추가 요청한 유저 목록 검색이 완료 되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+     searchFriendRequestByUserId: async ({ userId }) => {
+        if(!TypeChecker.isNumber(userId)) {
+            return { status: false };
+        }
+
+        const bind = [
+            userId
+        ];
+
+        try {
+            const result = await oracleDbHelper.connection.execute(FriendRequestedQuery.searchFriendRequestByUserId, bind);
+            return { status: true, data: result.rows };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data
+     * @property { Number } userId - data.userId, 현재 유저 index
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<User> } data
+     * 
+     * @description
+     * ```js
+     * // 현재 유저에게 친구 추가 요청한 유저 목록 검색이 완료 되었을 경우
+     * { 
+     *  status : true, 
+     *  data: []
+     * } 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 현재 유저에게 친구 추가 요청한 유저 목록 검색이 완료 되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+     searchFriendRequestedByUserId: async ({ userId }) => {
+        if(!TypeChecker.isNumber(userId)) {
+            return { status: false };
+        }
+
+        const bind = [
+            userId
+        ];
+
+        try {
+            const result = await oracleDbHelper.connection.execute(FriendRequestedQuery.searchFriendRequestedByUserId, bind);
+            return { status: true, data: result.rows };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
     * @namedparam
     * @param { Object } data
     * @property { Number } followerId - data.followerId, 친구 요청 보낸 사람
