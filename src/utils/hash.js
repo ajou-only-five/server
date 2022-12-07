@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 
 const hashPassword = async (password) =>
     new Promise((resolve, reject) => {
-        bcrypt.genSalt(process.env.SALT_ROUNDS, (err, salt) => {
+        bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS), (err, salt) => {
             if (err) {
                 console.log(err);
                 reject(err);

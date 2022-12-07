@@ -1,3 +1,4 @@
+import oracledb from 'oracledb';
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
 import TodoQuery from '../query/todo.js';
@@ -12,6 +13,7 @@ export default {
      * 
      * @return { Object } 
      * @property { Boolean } status
+     * @property { Number } titleId
      * 
      * @description
      * ```js
@@ -36,18 +38,28 @@ export default {
             return false;
         }
 
-        const data = [
+        const bind = [
             userId,
             title,
             color,
             Date.now(),
-            Date.now()
+            Date.now(),
+            {
+                dir: oracledb.BIND_OUT,
+                type: oracledb.NUMBER
+            }
         ];
 
+        const option = { 
+            autoCommit: true 
+        };
+
         try {
-            await oracleDbHelper.connection.execute(TodoQuery.createTodoTitle, data);
-            await oracleDbHelper.connection.commit();
-            return { status: true };
+            const result = await oracleDbHelper.connection.execute(TodoQuery.createTodoTitle, bind, option);
+            const data = {
+                titleId: result.outBinds[0][0]
+            };
+            return { status: true, data: data };
         } catch (e) {
             console.log(e);
             return { status: false };
@@ -63,6 +75,7 @@ export default {
      * 
      * @return { Object } 
      * @property { Boolean } status
+     * @property { Number } itemId
      * 
      * @description
      * ```js
@@ -121,7 +134,7 @@ export default {
             _endAt = endAt;
         }
 
-        const data = [
+        const bind = [
             titleId,
             content,
             _startAt,
@@ -129,12 +142,85 @@ export default {
             0,
             Date.now(),
             Date.now(),
+            {
+                dir: oracledb.BIND_OUT,
+                type: oracledb.NUMBER
+            }
+        ];
+
+        const option = { 
+            autoCommit: true 
+        };
+
+        try {
+            await oracleDbHelper.connection.execute(TodoQuery.createTodoItem, bind, option);
+            const data = {
+                itemId: result.outBinds[0][0]
+            };
+            return { status: true, data: data};
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data
+     * @property { Number } userId - data.titleId, todo title index
+     * @property { Number } year - data.year, todo 내용
+     * @property { Number } month - data.month, todo 시작 시간
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<Array< Todo >> }
+     * 
+     * @description
+     * ```js
+     * // todo item 생성이 정상적으로 완료되고, 해당 정보가 DB에 저장 됐을 경우
+     * { status : true} 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // todo item 생성이 완료되지 않았을 경우
+     * // 해당 정보가 DB에 저장되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+    searchTodoListInMonth: async ({ userId, year, month }) => {
+        const startAt = new Date(year, month - 1).getTime();
+        const endAt = new Date(year, month, 1).getTime() - 1;
+
+        const bind = [
+            userId,
+            userId,
+            startAt,
+            endAt,
+            startAt,
+            endAt
         ];
 
         try {
-            await oracleDbHelper.connection.execute(TodoQuery.createTodoItem, data);
-            await oracleDbHelper.connection.commit();
-            return { status: true };
+            const result = await oracleDbHelper.connection.execute(TodoQuery.searchTodoListInMonth, bind);
+
+            let dataList = [];
+
+            if (result.rows.length === 0) {
+                return { status: true, data: result.rows };
+            }
+
+            for (const data of result.rows) {
+                dataList.push({
+                    titleId: data[0],
+                    itemId: data[1],
+                    title: data[2],
+                    content: data[3],
+                    startAt: data[4],
+                    endAt: data[5],
+                    isChecked: data[6],
+                    createAt: data[7]
+                });
+            }
+
+            return { status: true, data: dataList };
         } catch (e) {
             console.log(e);
             return { status: false };
@@ -173,7 +259,7 @@ export default {
             return false;
         }
 
-        const data = [
+        const bind = [
             title,
             color,
             Date.now(),
@@ -181,7 +267,7 @@ export default {
         ];
 
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoTitle, data);
+            const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoTitle, bind);
             await oracleDbHelper.connection.commit();
             return { status: true, data: result };
         } catch (e) {
@@ -263,7 +349,7 @@ export default {
         const checkedAt = todoItem[8];
 
         if (checkedAt === null) {
-            const data = [
+            const bind = [
                 content,
                 _startAt,
                 _endAt,
@@ -274,7 +360,7 @@ export default {
             ];
 
             try {
-                const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoItemWithCheckedAt, data);
+                const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoItemWithCheckedAt, bind);
                 await oracleDbHelper.connection.commit();
                 return { status: true, data: result };
             } catch (e) {
@@ -325,12 +411,12 @@ export default {
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             titleId,
         ];
 
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoTitle, data);
+            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoTitle, bind);
             await oracleDbHelper.connection.commit();
             return { status: true, data: result };
         } catch (e) {
@@ -362,12 +448,12 @@ export default {
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             itemId,
         ];
 
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoItem, data);
+            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoItem, bind);
             await oracleDbHelper.connection.commit();
             return { status: true, data: result };
         } catch (e) {

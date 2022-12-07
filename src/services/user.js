@@ -56,7 +56,7 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             account,
             _hashedPassword,
             nickname,
@@ -64,12 +64,22 @@ export default Object.freeze({
             disclosure,
             Date.now(),
             Date.now(),
+            {
+                dir: oracledb.BIND_OUT,
+                type: oracledb.NUMBER
+            }
         ];
 
+        const option = { 
+            autoCommit: true 
+        };
+
         try {
-            await oracleDbHelper.connection.execute(UserQuery.createUser, data);
-            await oracleDbHelper.connection.commit();
-            return { status: true };
+            const result = await oracleDbHelper.connection.execute(UserQuery.createUser, bind, option);
+            const data = {
+                userId: result.outBinds[0][0]
+            };
+            return { status: true, data: data };
         } catch (e) {
             console.log(e);
             return { status: false };
