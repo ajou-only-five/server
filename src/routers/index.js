@@ -9,4 +9,8 @@ router.get("/", function (req, res, next) {
   res.send("index")
 });
 
+<<<<<<< HEAD
 export {router as indexRouter}
+=======
+export default router;
+>>>>>>> b65e5fdf812fd0125853436e07da7c7527cf8faf

@@ -1,9 +1,22 @@
 import "./src/env/env.js";
+<<<<<<< HEAD
 import express from "express";
 import session, { Cookie } from "express-session";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+=======
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+
+import indexRouter from './src/routers/index.js';
+import usersRouter from './src/routers/users.js';
+import dummyRouter from './src/routers/dummy.js';
+
+const app = express();
+>>>>>>> b65e5fdf812fd0125853436e07da7c7527cf8faf
 const __dirname = path.resolve();
 //const db_helper = require('./db/db_helper');
 import {indexRouter} from  "./src/routers/index.js";
@@ -20,10 +33,16 @@ const app = express();
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+<<<<<<< HEAD
+=======
+app.use('/api', indexRouter);
+app.use('/api/user', usersRouter);
+app.use('/api/dummy', dummyRouter);
+>>>>>>> b65e5fdf812fd0125853436e07da7c7527cf8faf
 
 
 app.listen(3000, function () {
