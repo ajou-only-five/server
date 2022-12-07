@@ -1,32 +1,31 @@
 import oracledb from 'oracledb';
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
-import TodoQuery from '../query/todo.js';
+import FriendRequestedQuery from '../query/friendRequest';
 
 export default {
     /**
      * @namedparam
      * @param { Object } data
-     * @property { Number } userId - data.userId, 유저 index
-     * @property { String } title - data.title, todo 제목
-     * @property { String } color - data.color, todo 색깔
+     * @property { Number } followerId - data.followerId, 친구 요청 보낸 사람
+     * @property { Number } followeeId - data.followeeId, 친구 요청 받은 사람
      * 
      * @return { Object } 
      * @property { Boolean } status
-     * @property { Number } titleId
+     * @property { Number } friendRequestId
      * 
      * @description
      * ```js
-     * // 제목 생성이 정상적으로 완료되고, 해당 정보가 DB에 저장 됐을 경우
+     * // 친구 요청 생성이 정상적으로 완료되고, 해당 정보가 DB에 저장 됐을 경우
      * { status : true} 
      * 
      * // parameter 타입이 맞지 않을 경우
-     * // 제목 생성이 완료되지 않았을 경우
+     * // 친구 요청 생성이 완료되지 않았을 경우
      * // 해당 정보가 DB에 저장되지 않았을 경우
      * { status : false }
      * ```
      */
-    createTodoTitle: async ({ userId, title, color }) => {
+    createFriendRequest: async ({ followerId, followeeId }) => {
         const typeCheckData = [
             [userId, title, color],
             ['Number', 'String', 'String'],
@@ -158,82 +157,6 @@ export default {
                 itemId: result.outBinds[0][0]
             };
             return { status: true, data: data};
-        } catch (e) {
-            console.log(e);
-            return { status: false };
-        }
-    },
-     /**
-     * @namedparam
-     * @param { Object } data
-     * @property { Number } titleId - data.titleId, todo title index
-     * 
-     * @return { Object } 
-     * @property { Boolean } status
-     * @property { Object } data
-     * 
-     * @description
-     * ```js
-     * // todo title이 정상적으로 검색되고, 해당 정보가 DB에 저장 됐을 경우
-     * { status : true, data: titleObject } 
-     * 
-     * // parameter 타입이 맞지 않을 경우
-     * // todo title 검색이 완료되지 않았을 경우
-     * // 해당 정보가 DB에 저장되지 않았을 경우
-     * { status : false }
-     * ```
-     */
-    findTodoTitle: async ({titleId}) => {
-        if(!TypeChecker.isNumber(titleId)) {
-            return { status: false };
-        }
-
-        const bind = [
-            titleId
-        ];
-
-        try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.findTodoTitle, bind);
-
-            return { status: true, data: result.rows[0] };
-        } catch (e) {
-            console.log(e);
-            return { status: false };
-        }
-    },
-    /**
-     * @namedparam
-     * @param { Object } data
-     * @property { Number } itemId - data.itemId, todo title index
-     * 
-     * @return { Object } 
-     * @property { Boolean } status
-     * @property { Object } data
-     * 
-     * @description
-     * ```js
-     * // todo item이 정상적으로 검색되고, 해당 정보가 DB에 저장 됐을 경우
-     * { status : true, data: titleObject } 
-     * 
-     * // parameter 타입이 맞지 않을 경우
-     * // todo item 검색이 완료되지 않았을 경우
-     * // 해당 정보가 DB에 저장되지 않았을 경우
-     * { status : false }
-     * ```
-     */
-    findTodoItem: async ({itemId}) => {
-        if(!TypeChecker.isNumber(itemId)) {
-            return { status: false };
-        }
-
-        const bind = [
-            itemId
-        ];
-
-        try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.findTodoItem, bind);
-
-            return { status: true, data: result.rows[0] };
         } catch (e) {
             console.log(e);
             return { status: false };

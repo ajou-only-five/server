@@ -26,6 +26,10 @@ export default Object.freeze({
     /**
      * @param { Number } titleId
      */
+     findTodoTitle : `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
+    /**
+     * @param { Number } itemId
+     */
     findTodoItem : `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
     /**
      * @param { Number } userId
@@ -43,6 +47,7 @@ export default Object.freeze({
         AND TI.title_id IN (SELECT id FROM TODO_TITLE WHERE user_id = :2) 
         AND ((TI.start_at BETWEEN :3 AND :4) 
         OR (TI.end_at BETWEEN :5 AND :6))
+        ORDER BY TI.start_at ASC, create_at ASC
     `,
     /**
      * @param { String } title
