@@ -134,7 +134,7 @@ router.get('/todoitem/search', async function (req, res, next) {
 
 router.get('/searchFriend', async function (req, res, next) {
     try {
-        const result = await FriendServices.deleteUserByAccount({ account: req.query.account });
+        const result = await FriendServices.searchFriendByUserId({ userId: parseInt(req.query.userId)});
 
         if (result.status) {
             res.status(200).json({ status: true });

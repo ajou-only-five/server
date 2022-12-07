@@ -1,7 +1,7 @@
 import oracledb from 'oracledb';
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
-import FriendQuery from '../query/friend';
+import FriendQuery from '../query/friend.js';
 
 export default {
     /**
@@ -104,7 +104,7 @@ export default {
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(FriendQuery.createFriend, bind, option);
+            const result = await oracleDbHelper.connection.execute(FriendQuery.searchFriendByUserId, bind, option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
