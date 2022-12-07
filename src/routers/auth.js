@@ -1,5 +1,4 @@
 import express from "express";
-import { oracleDbHelper } from "../db/index.js";
 import session from "express-session";
 import UserServices from '../services/user.js';
 
@@ -12,17 +11,20 @@ router.get("/", function (req, res, next) {
 });
 
 router.post("/sign-up", async function (req, res, next) { //회원가입
-  const data = [
-    req.body.accountName,
-    req.body.password,
-    req.body.nickname,
-    "default",
-    0,
-  ];
+  const data = {
+    accountName:req.body.accountName,
+    password:req.body.password,
+    nickname:req.body.nickname,
+    profile:"default",
+    disclosure:0,
+  }
   try{
     let result = await UserServices.createUser(data);
     if(result.status){
-      return res.status(200).json({message:"회원가입 성공"})
+      return res.status(200).json({
+        message:"회원가입 성공",
+        userId:result.data.userId
+      })
     }
     else{
       return res.status(400).json({
@@ -37,9 +39,9 @@ router.post("/sign-up", async function (req, res, next) { //회원가입
   
 });
 router.post("/login", async function (req, res, next) {
-  const data=[
-    req.body.accountName,
-  ]
+  const data={
+    accountName:req.body.accountName,
+  }
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){//정보가 있으면 세션에 저장.

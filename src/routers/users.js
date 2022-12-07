@@ -1,8 +1,4 @@
 import express from 'express';
-import oracleDbHelper from '../db/index.js';
-import oracledb from 'oracledb';
-import UserServices from '../services/user.js';
-import TodoServices from '../services/todo.js';
 
 const router = express.Router();
 
@@ -44,4 +40,4 @@ router.get('/sign-up', async function (req, res, next) {
   // }
 });
 
-export default router;
+export {router as usersRouter}
