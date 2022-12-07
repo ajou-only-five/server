@@ -1,5 +1,8 @@
 import express from "express";
 import session from "express-session";
+
+import bcrypt from "bcrypt";
+
 import UserServices from '../services/user.js';
 
 var router = express.Router();
@@ -12,7 +15,7 @@ router.get("/", function (req, res, next) {
 
 router.post("/sign-up", async function (req, res, next) { //회원가입
   const data = {
-    accountName:req.body.accountName,
+    account:req.body.account,
     password:req.body.password,
     nickname:req.body.nickname,
     profile:"default",
@@ -40,8 +43,9 @@ router.post("/sign-up", async function (req, res, next) { //회원가입
 });
 router.post("/login", async function (req, res, next) {
   const data={
-    accountName:req.body.accountName,
-  }
+    account:req.body.account,
+  };
+
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){//정보가 있으면 세션에 저장.
@@ -50,7 +54,8 @@ router.post("/login", async function (req, res, next) {
           message:"해당 account를 가진 user가 없습니다."
         })
       }
-      if(result.data[2]!==req.body.password){
+
+      if(bcrypt.compareSync(req.body.password, result.data[0][2])){
         return res.status(400).json({
           message:"비밀번호가 틀립니다.",
         })
@@ -68,6 +73,7 @@ router.post("/login", async function (req, res, next) {
     })
   }
   }catch(err){
+    console.log(err);
     return res.status(500).json({
       message:"server error"
     })
