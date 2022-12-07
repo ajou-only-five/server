@@ -10,19 +10,6 @@ export default Object.freeze({
         RETURNING id into :id
         `,
     /**
-     * @param { Number } userId 친구
-     */
-    searchFriendByUserId: `
-        SELECT U.id, U.account, U.nickname, U.profile, U.disclosure 
-        FROM USERS U, (
-            SELECT *
-            FROM FRIEND
-            WHERE user_id_1 = :userId OR user_id_2 = :userId
-        ) F
-        WHERE (F.user_id_1 = :userId AND U.id IN F.user_id_2) OR (F.user_id_2 = :userId AND U.id IN F.user_id_1)
-        ORDER BY nickname ASC, id ASC
-        `,
-    /**
      * @param { Number } userId_1 친구 1
      * @param { Number } userId_2 친구 2
      */
