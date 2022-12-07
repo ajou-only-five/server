@@ -55,7 +55,7 @@ router.post("/login", async function (req, res, next) {
         })
       }
 
-      if(bcrypt.compareSync(req.body.password, result.data[0][2])){
+      if(!bcrypt.compareSync(req.body.password, result.data[0][2])){
         return res.status(400).json({
           message:"비밀번호가 틀립니다.",
         })

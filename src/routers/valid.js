@@ -9,18 +9,18 @@ router.get("/", function (req, res, next) {
   next();
 });
 router.post("/accountName/exists",async function(req,res,next){
-  const data = [
-    req.body.accountName
-  ]
+    
+  const data = {account: req.body.account}
+
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){
       if(result.data.length===0){
-        res.status(400).json({
+        return res.status(200).json({
           message:"해당 acccount를 가진 user가 없습니다."
         })
       }
-      return res.status(200).json({
+      return res.status(400).json({
         message:"해당 acoount를 가진 user가 존재합니다"
       })
     }
@@ -36,14 +36,19 @@ router.post("/accountName/exists",async function(req,res,next){
   }
 })
 router.post("/nickname/exists",async function(req,res,next){
-  const data = [
-    req.body.nickname
-  ]
+  const data = {nickname: req.body.nickname}
+    
   try{
     let result = await UserServices.findUserByNickname(data)
+    console.log(result)
     if(result.status){
-      return res.status(200).json({
-        result:true,
+      if(!result.data.length){
+        return res.status(200).json({
+          message:"해당 acccount를 가진 user가 없습니다."
+        })
+      }
+      return res.status(400).json({
+        message:"해당 acoount를 가진 user가 존재합니다"
       })
     }
     else{
