@@ -6,8 +6,21 @@ export default Object.freeze({
         `,
     findUserByAccount: `SELECT * FROM USERS WHERE account = :account ORDER BY nickname`,
     findUserByNickname: `SELECT * FROM USERS WHERE nickname = :nickname ORDER BY nickname`,
-    searchUsersByNickname: ({nickname}) => `SELECT id, account, nickname, profile, disclosure FROM USERS WHERE nickname LIKE '%${nickname}%' ORDER BY nickname`,
-    searchUsersByNicknameBetween: ({nickname, start, end}) => `SELECT id, account, nickname, profile, disclosure FROM (SELECT ROWNUM AS NUM, id, account, nickname, profile, disclosure FROM USERS WHERE nickname LIKE '%${nickname}%') WHERE NUM BETWEEN ${start} AND ${end}`,
+    searchUsersByNickname: ({nickname}) => `
+        SELECT id, account, nickname, profile, disclosure 
+        FROM USERS 
+        WHERE nickname LIKE '%${nickname}%' 
+        ORDER BY nickname ASC, id ASC
+        `,
+    searchUsersByNicknameBetween: ({nickname, start, end}) => `
+        SELECT id, account, nickname, profile, disclosure 
+        FROM (
+            SELECT ROWNUM AS NUM, id, account, nickname, profile, disclosure 
+            FROM USERS 
+            WHERE nickname LIKE '%${nickname}%'
+        ) WHERE NUM BETWEEN ${start} AND ${end}
+        ORDER BY nickname ASC, id ASC
+        `,
     updatePasswordByAccount: `UPDATE USERS SET password = :password, update_at = :update_at WHERE account = :account`, 
     updateNicknameByAccount: `UPDATE USERS SET nickname = :nickname, update_at = :update_at WHERE account = :account`, 
     updateProfileByAccount: `UPDATE USERS SET profile = :profile, update_at = :update_at WHERE account = :account`,
