@@ -8,7 +8,7 @@ router.get("/", function (req, res, next) {
   res.send("valid");
   next();
 });
-router.post("/accountName/exists",async function(req,res,next){
+router.post("/account/exists",async function(req,res,next){
     
   const data = {account: req.body.account}
 
@@ -40,7 +40,6 @@ router.post("/nickname/exists",async function(req,res,next){
     
   try{
     let result = await UserServices.findUserByNickname(data)
-    console.log(result)
     if(result.status){
       if(!result.data.length){
         return res.status(200).json({
