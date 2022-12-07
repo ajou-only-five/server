@@ -266,8 +266,12 @@ export default {
             titleId
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoTitle, bind);
+            const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoTitle, bind, option);
             await oracleDbHelper.connection.commit();
             return { status: true, data: result };
         } catch (e) {
@@ -369,7 +373,7 @@ export default {
             }
         }
 
-        const data = [
+        const bind = [
             content,
             _startAt,
             _endAt,
@@ -378,9 +382,12 @@ export default {
             itemId,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoItemWithoutCheckedAt, data);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(TodoQuery.updateTodoItemWithoutCheckedAt, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -415,9 +422,12 @@ export default {
             titleId,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoTitle, bind);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoTitle, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);

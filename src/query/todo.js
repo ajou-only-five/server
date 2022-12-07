@@ -73,7 +73,13 @@ export default Object.freeze({
     /**
      * @param { Number } titleId
      */
-    deleteTodoTitle: `DELETE FROM TODO_TITLE WHERE id=:title_id`,
+    deleteTodoTitle: `
+        DECLARE
+            BEGIN
+                DELETE FROM TODO_TITLE WHERE id=:title_id;
+                DELETE FROM TODO_ITEM WHERE title_id=:title_id;
+            END;
+    `,
     /**
      * @param { Number } itemId
      */

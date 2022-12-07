@@ -124,12 +124,16 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             account,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, data);
+            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind, option);
             return { status: true, data: result.rows[0] };
         } catch (e) {
             console.log(e);
@@ -174,12 +178,12 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             nickname,
         ];
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, data);
+            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind);
             return { status: true, data: result.rows[0] };
         } catch (e) {
             console.log(e);
@@ -237,12 +241,12 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = {
+        const bind = {
             nickname: nickname
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNickname(data));
+            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNickname(bind));
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -310,14 +314,14 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = {
+        const bind = {
             nickname: nickname,
             start: start,
             end: end
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNicknameBetween(data));
+            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNicknameBetween(bind));
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -371,15 +375,18 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             _hashedPassword,
             Date.now(),
             account,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updatePasswordByAccount, data);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(UserQuery.updatePasswordByAccount, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -420,15 +427,18 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             nickname,
             Date.now(),
             account,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updateNicknameByAccount, data);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateNicknameByAccount, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -469,7 +479,7 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             nickname,
             profile,
             disclosure,
@@ -477,8 +487,12 @@ export default Object.freeze({
             account,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updateUserByAccount, data);
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateUserByAccount, bind, option);
             await oracleDbHelper.connection.commit();
             return { status: true, data: result };
         } catch (e) {
@@ -520,14 +534,18 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             disclosure,
             Date.now(),
             account,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updateDisclosureByAccount, data);
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateDisclosureByAccount, bind, option);
             await oracleDbHelper.connection.commit();
             return { status: true, data: result };
         } catch (e) {
@@ -562,13 +580,16 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             account
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.deleteUserByAccount, data);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(UserQuery.deleteUserByAccount, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -602,13 +623,16 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const data = [
+        const bind = [
             nickname,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.deleteUserByNickname, data);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(UserQuery.deleteUserByNickname, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);

@@ -72,7 +72,7 @@ router.get('/sign-in', async function (req, res, next) {
 });
 
 router.get('/todo/create', async function (req, res, next) {
-    const userResult = await UserServices.findUserByAccount({account: req.query.account});
+    const userResult = await UserServices.findUserByAccount({ account: req.query.account });
 
     const userId = userResult.data[0];
 
@@ -134,6 +134,23 @@ router.get('/todoitem/search', async function (req, res, next) {
 router.delete('/deleteUser', async function (req, res, next) {
     try {
         const result = await UserServices.deleteUserByAccount({ account: req.query.account });
+
+        if (result.status) {
+            res.status(200).json({ status: true });
+            return;
+        }
+
+        res.status(500).json({ status: false });
+        return;
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ status: false });
+    }
+});
+
+router.delete('/deleteTitle', async function (req, res, next) {
+    try {
+        const result = await TodoServices.deleteTodoTitle({ titleId: parseInt(req.query.titleId) });
 
         if (result.status) {
             res.status(200).json({ status: true });
