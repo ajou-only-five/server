@@ -62,8 +62,22 @@ router.post("/login", async function (req, res, next) {
           message:"로그인 성공"
         })
       }
+<<<<<<< HEAD
       return res.status(400).json({
         message:"해당 account를 가진 user가 없습니다"
+=======
+
+      if(!bcrypt.compareSync(req.body.password, result.data[0][2])){
+        return res.status(400).json({
+          message:"비밀번호가 틀립니다.",
+        })
+      }
+      req.session.account=req.body.accountName;
+      req.session.password=req.body.password;
+      req.session.userId=result.data[0];
+      return res.status(200).json({
+        message:"로그인 성공"
+>>>>>>> d8bc733df980e265f4e8b954c48f9e81c1553094
       })
     }
     else{

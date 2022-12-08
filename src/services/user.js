@@ -1,4 +1,5 @@
-import oracledb from "oracledb";
+import oracledb from 'oracledb';
+
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker, HashUtils } from '../utils/index.js';
 import UserQuery from '../query/user.js';
@@ -63,8 +64,8 @@ export default Object.freeze({
             nickname,
             profile,
             disclosure,
-            Date.now(),
-            Date.now(),
+            new Date(Date.now()),
+            new Date(Date.now()),
             {
                 dir: oracledb.BIND_OUT,
                 type: oracledb.NUMBER
@@ -184,7 +185,7 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind);
-            return { status: true, data: result.rows[0] };
+            return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
             return { status: false };
@@ -377,7 +378,7 @@ export default Object.freeze({
 
         const bind = [
             _hashedPassword,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 
@@ -429,7 +430,7 @@ export default Object.freeze({
 
         const bind = [
             nickname,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 
@@ -483,7 +484,7 @@ export default Object.freeze({
             nickname,
             profile,
             disclosure,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 
@@ -536,7 +537,7 @@ export default Object.freeze({
 
         const bind = [
             disclosure,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 

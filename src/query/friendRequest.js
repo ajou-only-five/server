@@ -14,7 +14,7 @@ export default Object.freeze({
      * @param { Number } followeeId 친구 요청 받은 사람
      */
     deleteFriendRequest: `
-        DELETE FROM USERS 
+        DELETE FROM FRIEND_REQUEST 
         WHERE followerId = :followerId AND followeeId = :followeeId
-        `, 
+        `,
 });

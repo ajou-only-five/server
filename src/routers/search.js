@@ -1,8 +1,9 @@
 import express from "express";
 import UserServices from '../services/user.js';
 
-var router = express.Router();
+import { SearchController } from '../controllers/index.js';
 
+<<<<<<< HEAD
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
   try {
@@ -66,3 +67,11 @@ router.get("/between",async function(req,res,next){
   }
 })
 export {router as searchRouter}
+=======
+const router = express.Router();
+
+router.get('/friend', SearchController.searchFriend);
+router.get('/friendRequsted', SearchController.searchFriendRequsted);
+
+export default router;
+>>>>>>> d8bc733df980e265f4e8b954c48f9e81c1553094
