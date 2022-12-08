@@ -24,32 +24,40 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.all('/debug-api/*', function (req, res, next) {
+    res.header('Access-Control-Allow-Methods', "*");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "*");
+    res.header('Access-Control-Allow-Credentials', true);
+    next();
+  });
 
-
-app.listen(3000, function () {
+app.listen(3001, function () {
   console.log("Express server is listening");
 });
 app.use(session({
   secret:"ajou-only-five",
   resave:false, //session이 변동 사항이 없어도 저장되는 것을 막음
   saveUninitialized:false, //아무 내용이 없는 session이 저장되는 것을 막음
-  cookie:1000*60*60, //session 유지 시간 1시간
+  cookie: {
+    maxAge: 1000*60*60,
+   } //session 유지 시간 1시간
 }))
-app.get("/api/ss",function(req,res){
+app.get("/debug-api/ss",function(req,res){
   console.log(req.session)
   console.log("ss")
   res.send("ss")
 })
-app.use('/api/', indexRouter);
-app.use('/api/users', usersRouter);
-app.use("/api/todoItem", todoItemRouter);
-app.use("/api/todoItemDone", todoItemDoneRouter);
-app.use("/api/follow", followRouter);
-app.use("/api/myInfo", myInfoRouter);
-app.use("/api/search", searchRouter);
-app.use("/api/todoTitle", todoTitleRouter);
-app.use("/api/valid", validRouter);
-app.use("/api/auth", authRouter);
+app.use('/debug-api/', indexRouter);
+app.use('/debug-api/users', usersRouter);
+app.use("/debug-api/todoItem", todoItemRouter);
+app.use("/debug-api/todoItemDone", todoItemDoneRouter);
+app.use("/debug-api/follow", followRouter);
+app.use("/debug-api/myInfo", myInfoRouter);
+app.use("/debug-apiapi/search", searchRouter);
+app.use("/debug-api/todoTitle", todoTitleRouter);
+app.use("/debug-api/valid", validRouter);
+app.use("/debug-api/auth", authRouter);
 /*
  */
 app.use((req, res, next) => {
