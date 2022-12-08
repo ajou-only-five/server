@@ -16,11 +16,11 @@ router.post("/accountName/exists",async function(req,res,next){
     let result = await UserServices.findUserByAccount(data)
     if(result.status){
       if(result.data.length===0){
-        res.status(400).json({
+        res.status(200).json({
           message:"해당 acccount를 가진 user가 없습니다."
         })
       }
-      return res.status(200).json({
+      return res.status(400).json({
         message:"해당 acoount를 가진 user가 존재합니다"
       })
     }
@@ -43,11 +43,11 @@ router.post("/nickname/exists",async function(req,res,next){
     let result = await UserServices.findUserByNickname(data)
     if(result.status){
       if(result.data.length===0){
-        res.status(400).json({
+        res.status(200).json({
           message:"해당 nickname를 가진 user가 없습니다."
         })
       }
-      return res.status(200).json({
+      return res.status(400).json({
         message:"해당 nickname을 가진 user가 존재합니다"
       })
     }
