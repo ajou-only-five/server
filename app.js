@@ -5,7 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 const __dirname = path.resolve();
-//const db_helper = require('./db/db_helper');
+import oracleDbHelper from './src/db/index.js';
 import { indexRouter } from "./src/routers/index.js";
 import { usersRouter } from "./src/routers/users.js";
 import todoRouter from "./src/routers/todo.js";
@@ -30,7 +30,7 @@ app.use(session({
   } //session 유지 시간 1시간
 }));
 
-app.all('/debug-api/*', function (req, res, next) {
+app.all('/api/*', function (req, res, next) {
   res.header('Access-Control-Allow-Methods', "*");
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
@@ -38,7 +38,14 @@ app.all('/debug-api/*', function (req, res, next) {
   next();
 });
 
-app.get("/debug-api/ss", function (req, res) {
+app.all('/api/*', function (req, res, next) {
+  if (!oracleDbHelper.isConnected()) {
+    return res.status(500).send("DB isn't connected");
+  }
+  next();
+});
+
+app.get("/api/ss", function (req, res) {
   console.log(req.session)
   console.log("ss")
   res.send("ss")

@@ -59,7 +59,7 @@ export default Object.freeze({
             const data = {
                 titleId: result.outBinds[0][0]
             };
-            return { status: true, data: data };
+            return { status: true, data };
         } catch (e) {
             console.log(e);
             return { status: false };

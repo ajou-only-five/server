@@ -26,6 +26,14 @@ const isNumber = (object) => {
     return false;
 };
 
+const isInteger = (number) => {
+    if(isNaN(number)) {
+        return false;
+    }
+
+    return number % 1 === 0;
+}
+
 // Reference : https://stackoverflow.com/questions/643782/how-to-check-whether-an-object-is-a-date
 const isDate = (object) => {
     return object && Object.prototype.toString.call(object) === "[object Date]" && !isNaN(object);
@@ -58,5 +66,6 @@ export default Object.freeze({
     isString: isString,
     isNumber: isNumber,
     isDate: isDate,
+    isInteger: isInteger,
     typeCheckAll: typeCheckAll
 });
