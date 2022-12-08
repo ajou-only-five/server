@@ -1,7 +1,7 @@
 import oracledb from 'oracledb';
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
-import FriendRequestedQuery from '../query/friendRequest';
+import FriendRequestedQuery from '../query/friendRequest.js';
 
 export default Object.freeze({
     /**

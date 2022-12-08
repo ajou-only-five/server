@@ -1,12 +1,10 @@
 import express from "express";
 
-var router = express.Router();
+import { SearchController } from '../controllers/index.js';
 
-/* GET users listing. */
-router.get("/", async function (req, res, next) {
-  try {
-  } catch (e) {
-    res.status(500).send("server error");
-  }
-});
-export {router as searchRouter}
+const router = express.Router();
+
+router.get('/friend', SearchController.searchFriend);
+router.get('/friendRequsted', SearchController.searchFriendRequsted);
+
+export default router;

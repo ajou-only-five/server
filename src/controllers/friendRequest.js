@@ -1,4 +1,3 @@
-import oracleDbHelper from '../db/index.js';
 import FriendRequestedServices from "../services/friendRequest.js";
 import { TypeChecker } from '../utils/index.js';
 
