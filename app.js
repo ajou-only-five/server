@@ -69,6 +69,20 @@ app.listen(3000, function () {
 
 // 개발 시에는 위를 주석처리하고 아래를 사용하세요.
 //
+// app.all('/debug-api/*', function (req, res, next) {
+//   res.header('Access-Control-Allow-Methods', "*");
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "*");
+//   res.header('Access-Control-Allow-Credentials', true);
+//   next();
+// });
+
+// app.all('/debug-api/*', function (req, res, next) {
+//   if (!oracleDbHelper.isConnected()) {
+//     return res.status(500).send("DB isn't connected");
+//   }
+//   next();
+// });
 // app.get("/debug-api/ss", function (req, res) {
 //   console.log(req.session)
 //   console.log("ss")
