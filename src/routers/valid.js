@@ -9,9 +9,9 @@ router.get("/", function (req, res, next) {
   next();
 });
 router.post("/accountName/exists",async function(req,res,next){
-  const data = [
-    req.body.accountName
-  ]
+  const data = {
+    account:req.body.account
+  }
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){
@@ -36,14 +36,19 @@ router.post("/accountName/exists",async function(req,res,next){
   }
 })
 router.post("/nickname/exists",async function(req,res,next){
-  const data = [
-    req.body.nickname
-  ]
+  const data = {
+    nickname:req.body.nickname
+  }
   try{
     let result = await UserServices.findUserByNickname(data)
     if(result.status){
+      if(result.data.length===0){
+        res.status(400).json({
+          message:"해당 nickname를 가진 user가 없습니다."
+        })
+      }
       return res.status(200).json({
-        result:true,
+        message:"해당 nickname을 가진 user가 존재합니다"
       })
     }
     else{
@@ -53,7 +58,6 @@ router.post("/nickname/exists",async function(req,res,next){
     }
   }catch(err){
     return res.status(500).json({
-      result:false,
       message:"server error"
     })
   }

@@ -6,35 +6,40 @@ var router = express.Router();
 /* GET users listing. */
 router.get("/", async function (req, res, next) {
   try {
-    const result = await oracleDbHelper.search({
-      table: "TODO_ITEM",
-      columns: ["nickname", "title"],
-      data: [req.body.nickname, req.body.title],
-    });
-    console.log(result);
-
-    if (result.code === 200) {
-      return res.status(200).send(result.data);
+    const data = {
+      itemId:parseInt(req.body.itemId)
     }
-
-    res.status(400).send("client error");
-    // res.status(500).send('server error');
+    let result = await TodoServices.findTodoItem(data)
+    if(result.status){
+      if(result.data.length===0){
+        return res.status(400).json({
+          message:"해당 itemId를 가진 todo item이 없습니다"
+        })
+      }
+      else{
+        return res.status(200).json({
+          message:"해당 itemId를 가진 todo item이 있습니다",
+          data:result.data
+        })
+      }
+    }
   } catch (e) {
-    res.status(500).send("server error");
+    res.status(500).json({message:"server error"});
   }
 });
 router.post("/", async function (req, res, next) {
   try {
-    const data = [
-      req.body.titleId,
-      req.body.content,
-      req.body.startAt,
-      req.body.endAt
-    ]
+    const data = {
+      titleId:parseInt(req.body.titleId),
+      content:req.body.content,
+      startAt:parseInt(req.body.startAt),
+      endAt:parseInt(req.body.endAt)
+    }
     let result = await TodoServices.createTodoItem(data)
     if(result.status){
       return res.status(200).json({
-        message:"success to create todoItem"
+        message:"success to create todoItem",
+        itemId:result.data.itemId
       })
     }
     else{
@@ -46,15 +51,15 @@ router.post("/", async function (req, res, next) {
     res.status(500).json({message:"server error"});
   }
 });
-router.put("/", async function (req, res, next) {
+router.patch("/", async function (req, res, next) {
   try {
-    const data = [
-      req.body.content,
-      req.body.startAt,
-      req.body.endAt,
-      req.body.isChecked,
-      req.body.itemId
-    ]
+    const data = {
+      content:req.body.content,
+      startAt:parseInt(req.body.startAt),
+      endAt:parseInt(req.body.endAt),
+      isChecked:parseInt(req.body.isChecked),
+      itemId:parseInt(req.body.itemId)
+    }
     let result = await TodoServices.updateTodoItemByItemId(data)
     if(result.status){
       return res.status(200).json({
@@ -72,9 +77,9 @@ router.put("/", async function (req, res, next) {
 });
 router.delete("/", async function (req, res, next) {
   try {
-    const data = [
-      req.body.itemId
-    ]
+    const data = {
+      itemId:parseInt(req.body.itemId)
+    }
     let result = await TodoServices.deleteTodoItem(data)
     if(result.status){
       return res.status(200).json({
@@ -83,7 +88,7 @@ router.delete("/", async function (req, res, next) {
     }
     else{
       return res.status(400).json({
-        message:"fail to delete todoItem"
+        message:"fail to delete todoItem(db error)"
       })
     }
   } catch (e) {
