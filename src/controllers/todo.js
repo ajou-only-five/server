@@ -204,10 +204,10 @@ export default Object.freeze({
         };
 
         if (data.itemId === undefined) {
-            return res.status(400).send("titleId must be required.");
+            return res.status(400).send("itemId must be required.");
         }
-        if (!TypeChecker.isInteger(data.titleId)) {
-            return res.status(400).send("titleId must be integer.");
+        if (!TypeChecker.isInteger(data.itemId)) {
+            return res.status(400).send("itemId must be integer.");
         }
         if (data.content === undefined) {
             return res.status(400).send("contenst must be required.");
