@@ -94,6 +94,49 @@ export default Object.freeze({
      * @param { Object } data
      * @property { Number } userId - data.userId, 현재 유저 index
      * @property { String } nickname - data.nickname, 검색하는 닉네임
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<User> } data
+     * 
+     * @description
+     * ```js
+     * // 친구 검색이 완료 되었을 경우
+     * { 
+     *  status : true, 
+     *  data: []
+     * } 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 친구 검색이 완료되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+     searchFriendByUserIdAndNickname: async ({ userId, nickname }) => {
+        if (!TypeChecker.isNumber(userId)) {
+            return { status: false };
+        }
+
+        const bind = [
+            userId,
+            start,
+            end
+        ];
+
+        try {
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserIdAndNickname(nickname), bind);
+            console.log(result);
+            return { status: true, data: result.rows };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data
+     * @property { Number } userId - data.userId, 현재 유저 index
+     * @property { String } nickname - data.nickname, 검색하는 닉네임
      * @property { Number } start - data.start, 시작 범위
      * @property { Number } end - data.end, 종료 범위
      * 
@@ -222,6 +265,47 @@ export default Object.freeze({
      * @param { Object } data
      * @property { Number } userId - data.userId, 현재 유저 index
      * @property { String } nickname - data.nickname, 검색하려는 닉네임
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<User> } data
+     * 
+     * @description
+     * ```js
+     * // 현재 유저가 친구 요청을 보낸 유저 범위 검색이 완료 되었을 경우
+     * { 
+     *  status : true, 
+     *  data: []
+     * } 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 현재 유저가 친구 요청을 보낸 유저 범위 검색이 완료되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+     searchFriendRequestByUserIdAndNickname: async ({ userId, nickname }) => {
+        if (!TypeChecker.isNumber(userId)) {
+            return { status: false };
+        }
+
+        const bind = [
+            userId,
+        ];
+
+        try {
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserIdAndNickname(nickname), bind);
+            console.log(result);
+            return { status: true, data: result.rows };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data
+     * @property { Number } userId - data.userId, 현재 유저 index
+     * @property { String } nickname - data.nickname, 검색하려는 닉네임
      * @property { Number } start - data.start, 시작 범위
      * @property { Number } end - data.end, 종료 범위
      * 
@@ -338,6 +422,47 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdBetween, bind);
+            console.log(result);
+            return { status: true, data: result.rows };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data
+     * @property { Number } userId - data.userId, 현재 유저 index
+     * @property { String } nickname - data.nickname, 검색하려는 닉네임
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<User> } data
+     * 
+     * @description
+     * ```js
+     * // 현재 유저에게 친구 요청을 보낸 유저 범위 검색이 완료 되었을 경우
+     * { 
+     *  status : true, 
+     *  data: []
+     * } 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 현재 유저에게 친구 요청을 보낸 유저 범위 검색이 완료되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+     searchFriendRequestedByUserIdAndNickname: async ({ userId, nickname }) => {
+        if (!TypeChecker.isNumber(userId)) {
+            return { status: false };
+        }
+
+        const bind = [
+            userId,
+        ];
+
+        try {
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdAndNickname(nickname), bind);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {

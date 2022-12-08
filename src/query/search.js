@@ -33,6 +33,24 @@ export default Object.freeze({
         )
     ) WHERE NUM BETWEEN :start AND :end;
     `,
+     /**
+    * @param { Number } userId 본인
+    * @param { String } nickname 검색하는 닉네임
+    */
+    searchFriendByUserIdAndNickname: (nickname) => `
+        SELECT id, account, nickname, profile, disclosure 
+        FROM (
+            SELECT U.id, U.account, U.nickname, U.profile, U.disclosure 
+            FROM USERS U, (
+                SELECT *
+                FROM FRIEND
+                WHERE user_id_1 = :user_id OR user_id_2 = :user_id
+            ) F
+            WHERE (F.user_id_1 = :user_id AND U.id IN F.user_id_2) 
+            OR (F.user_id_2 = :user_id AND U.id IN F.user_id_1)
+            ORDER BY U.nickname ASC
+        ) WHERE nickname LIKE '%${nickname}%'
+    `,
     /**
     * @param { Number } userId 본인
     * @param { String } nickname 검색하는 닉네임
@@ -89,6 +107,24 @@ export default Object.freeze({
      )
      ) WHERE NUM BETWEEN :start AND :end;
      `,
+     /**
+   * @param { Number } userId 본인
+   * @param { String } nickname 검색하려는 닉네임
+
+   */
+    searchFriendRequestByUserIdAndNickname: (nickname) => `
+        SELECT id, account, nickname, profile, disclosure 
+        FROM  ( 
+            SELECT U.id, U.account, U.nickname, U.profile, U.disclosure 
+            FROM USERS U, (
+                SELECT followee_id
+                FROM FRIEND_REQUEST
+                WHERE follower_id = :user_id
+            ) F
+            WHERE U.id = F.followee_id
+            ORDER BY U.nickname ASC, id ASC
+        ) WHERE nickname LIKE '%${nickname}%';
+     `,
     /**
    * @param { Number } userId 본인
    * @param { String } nickname 검색하려는 닉네임
@@ -143,6 +179,23 @@ export default Object.freeze({
       ORDER BY U.nickname ASC, id ASC
       )
       ) WHERE NUM BETWEEN :start AND :end;
+      `,
+    /**
+    * @param { Number } userId 본인
+    * @param { String } nickname 검색하려는 닉네임
+    */
+     searchFriendRequestedByUserIdAndNickname: (nickname) => `
+     SELECT ROWNUM AS NUM, id, account, nickname, profile, disclosure 
+         FROM  ( 
+            SELECT U.id, U.account, U.nickname, U.profile, U.disclosure 
+            FROM USERS U, (
+                SELECT follower_id
+                FROM FRIEND_REQUEST
+                WHERE followee_id = :user_id
+            ) F
+            WHERE U.id = F.follower_id
+            ORDER BY U.nickname ASC, id ASC
+        ) WHERE nickname LIKE '%${nickname}%';
       `,
     /**
     * @param { Number } userId 본인

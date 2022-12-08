@@ -14,18 +14,40 @@ export default Object.freeze({
         if (!TypeChecker.isInteger(data.userId)) {
             return res.status(400).send("userId must be integer.");
         }
-        
+
         data.userId = parseInt(data.userId);
 
         // only userId
         if (data.start === undefined) {
+
+
+            // without nickname 
+            if (data.nickname === undefined) {
+                try {
+                    const result = await SearchServices.searchFriendByUserId(data);
+
+                    if (result.status) {
+                        return res.status(200).send(result.data);
+                    }
+
+                    return res.status(500).send("Server error.");
+                } catch (e) {
+                    return res.status(500).send("Server error");
+                }
+            }
+
+            if (!TypeChecker.isInteger(data.nickname)) {
+                return res.status(400).send("nickname must be string.");
+            }
+
+            // with nickname
             try {
-                const result = await SearchServices.searchFriendByUserId(data);
-                
+                const result = await SearchServices.searchFriendByUserIdAndNickname(data);
+
                 if (result.status) {
                     return res.status(200).send(result.data);
                 }
-    
+
                 return res.status(500).send("Server error.");
             } catch (e) {
                 return res.status(500).send("Server error");
@@ -49,23 +71,23 @@ export default Object.freeze({
         if (data.nickname === undefined) {
             try {
                 const result = await SearchServices.searchFriendByUserIdBetween(data);
-                
+
                 if (result.status) {
                     return res.status(200).send(result.data);
                 }
-    
+
                 return res.status(500).send("Server error.");
             } catch (e) {
                 return res.status(500).send("Server error");
             }
         }
-        if (!TypeChecker.isInteger(data.nickname)) {
+        if (!TypeChecker.isString(data.nickname)) {
             return res.status(400).send("nickname must be string.");
         }
 
         try {
             const result = await SearchServices.searchFriendByUserIdAndNicknameBetween(data);
-            
+
             if (result.status) {
                 return res.status(200).send(result.data);
             }
@@ -73,7 +95,7 @@ export default Object.freeze({
             return res.status(500).send("Server error.");
         } catch (e) {
             return res.status(500).send("Server error");
-        }        
+        }
     },
     // 요청 받은 친구 목록
     searchFriendRequsted: async (req, res, next) => {
@@ -87,18 +109,38 @@ export default Object.freeze({
         if (!TypeChecker.isInteger(data.userId)) {
             return res.status(400).send("userId must be integer.");
         }
-        
+
         data.userId = parseInt(data.userId);
 
         // only userId
         if (data.start === undefined) {
+            if (data.nickname === undefined) {
+                // without nickname
+                try {
+                    const result = await SearchServices.searchFriendRequestedByUserId(data);
+
+                    if (result.status) {
+                        return res.status(200).send(result.data);
+                    }
+
+                    return res.status(500).send("Server error.");
+                } catch (e) {
+                    return res.status(500).send("Server error");
+                }
+            }
+
+            if (!TypeChecker.isString(data.nickname)) {
+                return res.status(400).send("nickname must be string.");
+            }
+
+            // with nickname
             try {
-                const result = await SearchServices.searchFriendRequestedByUserId(data);
-                
+                const result = await SearchServices.searchFriendRequestedByUserIdAndNickname(data);
+
                 if (result.status) {
                     return res.status(200).send(result.data);
                 }
-    
+
                 return res.status(500).send("Server error.");
             } catch (e) {
                 return res.status(500).send("Server error");
@@ -122,23 +164,23 @@ export default Object.freeze({
         if (data.nickname === undefined) {
             try {
                 const result = await SearchServices.searchFriendRequestedByUserIdBetween(data);
-                
+
                 if (result.status) {
                     return res.status(200).send(result.data);
                 }
-    
+
                 return res.status(500).send("Server error.");
             } catch (e) {
                 return res.status(500).send("Server error");
             }
         }
-        if (!TypeChecker.isInteger(data.nickname)) {
+        if (!TypeChecker.isString(data.nickname)) {
             return res.status(400).send("nickname must be string.");
         }
 
         try {
             const result = await SearchServices.searchFriendRequestedByUserIdAndNicknameBetween(data);
-            
+
             if (result.status) {
                 return res.status(200).send(result.data);
             }
@@ -146,7 +188,7 @@ export default Object.freeze({
             return res.status(500).send("Server error.");
         } catch (e) {
             return res.status(500).send("Server error");
-        }        
+        }
     },
     searchUser: async (req, res, next) => {
         const data = {
@@ -164,7 +206,7 @@ export default Object.freeze({
 
         try {
             const result = await SearchServices.searchFriendRequestedByUserId(data);
-            
+
             if (result.status) {
                 return res.status(200).send(result.data);
             }
