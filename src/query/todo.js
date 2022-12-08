@@ -33,9 +33,6 @@ export default Object.freeze({
     findTodoItem : `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
     /**
      * @param { Number } userId
-     * @param { Number } userId
-     * @param { Number } monthStartAt timestamp
-     * @param { Number } monthEndAt timestamp
      * @param { Number } monthStartAt timestamp
      * @param { Number } monthEndAt timestamp
      */

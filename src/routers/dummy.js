@@ -40,12 +40,23 @@ router.get('/sign-up', async function (req, res, next) {
         }
     ];
 
+    let result;
     for (const user of userList) {
-        await UserServices.createUser(user);
+        try {
+            result = await UserServices.createUser(user);
+        } catch (e) {
+            console.log(e);
+            res.status(500).json({ status: true });
+            return;
+        }
     }
+
+    res.status(200).json({ result });
+    return;
 });
 
 router.get('/sign-in', async function (req, res, next) {
+    console.log(typeof(new Date(Date.now())));
     let result = null;
 
     if (req.query.account !== undefined) {
@@ -62,7 +73,7 @@ router.get('/sign-in', async function (req, res, next) {
             // 비밀번호 확인
             const same = bcrypt.compareSync(req.query.password, encodedPassword);
             if (same) {
-                res.status(200).json({ status: true });
+                res.status(200).json({ ...result });
                 return;
             }
 
@@ -80,7 +91,7 @@ router.get('/todo/create', async function (req, res, next) {
     const data = {
         userId: userId,
         title: req.query.title,
-        color: req.query.color
+        color: req.query.color,
     };
 
     const todoTitleResult = await TodoServices.createTodoTitle(data);
@@ -98,10 +109,11 @@ router.get('/todoitem/create', async function (req, res, next) {
     const todoItemData = {
         titleId: parseInt(req.query.titleId),
         content: req.query.content,
-        startAt: parseInt(req.query.startAt),
-        endAt: parseInt(req.query.endAt)
+        startAt: new Date(req.query.startAt),
+        endAt: new Date(req.query.endAt),
     };
 
+    try {
     const todoItemResult = await TodoServices.createTodoItem(todoItemData);
 
     if (todoItemResult.status) {
@@ -111,6 +123,11 @@ router.get('/todoitem/create', async function (req, res, next) {
 
     res.status(400).json({ status: false });
     return;
+} catch(e) {
+    console.log(e);
+    res.status(500).json({ status: false });
+    return;
+}
 });
 
 router.get('/todoitem/search', async function (req, res, next) {
@@ -134,7 +151,7 @@ router.get('/todoitem/search', async function (req, res, next) {
 
 router.get('/searchFriend', async function (req, res, next) {
     try {
-        const result = await FriendServices.searchFriendByUserId({ userId: parseInt(req.query.userId)});
+        const result = await FriendServices.searchFriendByUserId({ userId: parseInt(req.query.userId) });
 
         if (result.status) {
             res.status(200).json({ status: true });

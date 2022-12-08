@@ -38,14 +38,14 @@ export default {
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return false;
         }
 
         const bind = [
             userId_1,
             userId_2,
-            Date.now(),
+            new Date(Date.now()),
             {
                 dir: oracledb.BIND_OUT,
                 type: oracledb.NUMBER
@@ -141,7 +141,7 @@ export default {
         ];
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return false;
         }
 

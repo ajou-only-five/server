@@ -40,7 +40,7 @@ export default Object.freeze({
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return { status: false };
         }
 
@@ -63,8 +63,8 @@ export default Object.freeze({
             nickname,
             profile,
             disclosure,
-            Date.now(),
-            Date.now(),
+            new Date(Date.now()),
+            new Date(Date.now()),
             {
                 dir: oracledb.BIND_OUT,
                 type: oracledb.NUMBER
@@ -378,7 +378,7 @@ export default Object.freeze({
 
         const bind = [
             _hashedPassword,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 
@@ -430,7 +430,7 @@ export default Object.freeze({
 
         const bind = [
             nickname,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 
@@ -484,7 +484,7 @@ export default Object.freeze({
             nickname,
             profile,
             disclosure,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 
@@ -537,7 +537,7 @@ export default Object.freeze({
 
         const bind = [
             disclosure,
-            Date.now(),
+            new Date(Date.now()),
             account,
         ];
 
