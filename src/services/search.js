@@ -3,7 +3,7 @@ import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
 import SearchQuery from '../query/search.js';
 
-export default {
+export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data
@@ -518,4 +518,4 @@ export default {
             return { status: false };
         }
     },
-}
+});

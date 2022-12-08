@@ -3,7 +3,7 @@ import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
 import TodoQuery from '../query/todo.js';
 
-export default {
+export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data
@@ -268,6 +268,17 @@ export default {
      * ```
      */
     searchTodoListInMonth: async ({ userId, year, month }) => {
+        const typeCheckData = [
+            [userId, year, momth],
+            ['number', 'number', 'number'],
+        ];
+
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
+
+        if (typeCheckResult) {
+            return false;
+        }
+
         const startAt = new Date(year, month - 1);
         const endAt = new Date(year, month, 1);
 
@@ -541,4 +552,4 @@ export default {
             return { status: false };
         }
     },
-}
+});

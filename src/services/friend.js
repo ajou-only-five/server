@@ -3,7 +3,7 @@ import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
 import FriendQuery from '../query/friend.js';
 
-export default {
+export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data
@@ -162,4 +162,4 @@ export default {
             return { status: false };
         }
     },
-}
+});

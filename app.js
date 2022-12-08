@@ -8,12 +8,10 @@ const __dirname = path.resolve();
 //const db_helper = require('./db/db_helper');
 import { indexRouter } from "./src/routers/index.js";
 import { usersRouter } from "./src/routers/users.js";
-import { todoItemRouter } from "./src/routers/todoItem.js"
-import { todoItemDoneRouter } from "./src/routers/todoItemDone.js";
+import todoRouter from "./src/routers/todo.js";
 import { followRouter } from "./src/routers/follow.js";
 import { searchRouter } from "./src/routers/search.js";
 import { myInfoRouter } from "./src/routers/myInfo.js";
-import { todoTitleRouter } from "./src/routers/todoTitle.js";
 import { authRouter } from "./src/routers/auth.js";
 import { validRouter } from "./src/routers/valid.js";
 const app = express();
@@ -47,12 +45,10 @@ app.get("/debug-api/ss", function (req, res) {
 })
 app.use('/api/', indexRouter);
 app.use('/api/users', usersRouter);
-app.use("/api/todoItem", todoItemRouter);
-app.use("/api/todoItemDone", todoItemDoneRouter);
+app.use('/api/todo', todoRouter);
 app.use("/api/follow", followRouter);
 app.use("/api/myInfo", myInfoRouter);
 app.use("/api/search", searchRouter);
-app.use("/api/todoTitle", todoTitleRouter);
 app.use("/api/valid", validRouter);
 app.use("/api/auth", authRouter);
 
