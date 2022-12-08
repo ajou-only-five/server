@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node -r dotenv/config ./bin/www"
+    "start": "node -r dotenv/config app.js",
+    "dev": "nodemon -r dotenv/config app.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -12,7 +13,9 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
     "express": "~4.16.1",
+    "express-session": "^1.17.3",
     "morgan": "~1.9.1",
-    "oracledb": "file:///home/ubuntu/workspace/ajou-only-five/backend/node-oracledb"
+    "nodemon": "^2.0.20",
+    "oracledb": "https://github.com/oracle/node-oracledb/releases/download/v5.5.0/oracledb-src-5.5.0.tgz"
   }
 }

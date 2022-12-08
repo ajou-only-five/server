@@ -1,4 +1,5 @@
 import oracledb from 'oracledb';
+
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker, HashUtils } from '../utils/index.js';
 import UserQuery from '../query/user.js';
@@ -121,7 +122,6 @@ export default Object.freeze({
      */
     findUserByAccount: async ({ account }) => {
         if (!TypeChecker.isString(account)) {
-            console.log(account);
             return { status: false };
         }
 
@@ -135,7 +135,8 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind, option);
-            return { status: true, data: result.rows[0] };
+            console.log(result.rows);
+            return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
             return { status: false };
@@ -185,7 +186,7 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind);
-            return { status: true, data: result.rows[0] };
+            return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
             return { status: false };
@@ -311,7 +312,7 @@ export default Object.freeze({
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return { status: false };
         }
 
@@ -359,7 +360,7 @@ export default Object.freeze({
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return { status: false };
         }
 
@@ -424,7 +425,7 @@ export default Object.freeze({
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return { status: false };
         }
 
@@ -476,7 +477,7 @@ export default Object.freeze({
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return { status: false };
         }
 
@@ -531,7 +532,7 @@ export default Object.freeze({
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
 
-        if (!typeCheckResult) {
+        if (typeCheckResult) {
             return { status: false };
         }
 
