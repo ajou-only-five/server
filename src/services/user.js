@@ -134,7 +134,7 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind, option);
-            return { status: true, data: result.rows[0] };
+            return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
             return { status: false };
