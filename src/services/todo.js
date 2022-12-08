@@ -3,7 +3,7 @@ import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
 import TodoQuery from '../query/todo.js';
 
-export default Object.freeze({
+export default {
     /**
      * @namedparam
      * @param { Object } data
@@ -59,7 +59,7 @@ export default Object.freeze({
             const data = {
                 titleId: result.outBinds[0][0]
             };
-            return { status: true, data };
+            return { status: true, data: data };
         } catch (e) {
             console.log(e);
             return { status: false };
@@ -116,12 +116,10 @@ export default Object.freeze({
         }
 
         if (!isStartAtNull && !TypeChecker.isDate(startAt)) {
-            console.log("hello");
             return { status: false };
         }
 
         if (!isEndAtNull && !TypeChecker.isDate(endAt)) {
-            console.log("hello!");
             return { status: false };
         }
 
@@ -268,17 +266,6 @@ export default Object.freeze({
      * ```
      */
     searchTodoListInMonth: async ({ userId, year, month }) => {
-        const typeCheckData = [
-            [userId, year, momth],
-            ['number', 'number', 'number'],
-        ];
-
-        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
-
-        if (typeCheckResult) {
-            return false;
-        }
-
         const startAt = new Date(year, month - 1);
         const endAt = new Date(year, month, 1);
 
@@ -552,4 +539,4 @@ export default Object.freeze({
             return { status: false };
         }
     },
-});
+}

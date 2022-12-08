@@ -8,7 +8,7 @@ export default Object.freeze({
         const data = {
             ...req.body
         };
-        
+
         if (data.userId === undefined) {
             return res.status(400).send("userId must be required.");
         }
@@ -36,7 +36,63 @@ export default Object.freeze({
             if (result.status) {
                 return res.status(200).send(result.data);
             }
-            
+
+            return res.status(500).send("Server error.");
+        } catch (e) {
+            return res.status(500).send("Server error");
+        }
+    },
+    createTodoItem: async (req, res, next) => {
+        // * @property { Number } titleId - data.titleId, todo title index
+        // * @property { String } content - data.content, todo 내용
+        // * @property { Date? } startAt - data.startAt, todo 시작 시간
+        // * @property { Date? } endAt - data.endAt, todo 종료 시간
+        const data = {
+            ...req.body
+        };
+
+        if (data.titleId === undefined) {
+            return res.status(400).send("titleId must be required.");
+        }
+        if (!TypeChecker.isInteger(data.titleId)) {
+            return res.status(400).send("titleId must be integer.");
+        }
+        if (data.content === undefined) {
+            return res.status(400).send("content must be required.");
+        }
+        if (!TypeChecker.isString(data.content)) {
+            return res.status(400).send("content must be string.");
+        }
+
+        if (data.startAt !== undefined) {
+            const startAt = new Date(data.startAt);
+
+            if (startAt.toString().includes('Invalid Date')) {
+                return res.status(400).send("startAt must be date.");
+            }
+
+            data.startAt = startAt;
+        }
+
+        if (data.endAt !== undefined) {
+            const endAt = new Date(data.endAt);
+
+            if (endAt.toString().includes('Invalid Date')) {
+                return res.status(400).send("endAt must be date.");
+            }
+
+            data.endAt = endAt;
+        }
+
+        data.titleId = parseInt(data.titleId);
+
+        try {
+            const result = await TodoServices.createTodoItem(data);
+
+            if (result.status) {
+                return res.status(200).send(result.data);
+            }
+
             return res.status(500).send("Server error.");
         } catch (e) {
             return res.status(500).send("Server error");
