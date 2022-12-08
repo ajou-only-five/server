@@ -10,6 +10,9 @@ router.post('/title', TodoController.createTodoTitle);
 router.post('/item', TodoController.createTodoItem);
 
 router.patch('/title',TodoController.updateTodoTitle);
-router.patch('/title',TodoController.updateTodoItem);
+router.patch('/item',TodoController.updateTodoItem);
+
+router.delete('/title', TodoController.deleteTodoTitle);
+router.delete('/item', TodoController.deleteTodoItem);
 
 export default router;

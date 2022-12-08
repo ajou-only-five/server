@@ -8,4 +8,4 @@ router.get("/", function (req, res, next) {
   res.send("index")
 });
 
-export {router as indexRouter}
+export default router;

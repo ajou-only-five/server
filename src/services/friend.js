@@ -134,7 +134,7 @@ export default Object.freeze({
     * { status : false }
     * ```
     */
-    deleteFriendRequest: async ({ userId_1, userId_2 }) => {
+    deleteFriend: async ({ userId_1, userId_2 }) => {
         const typeCheckData = [
             [userId_1, userId_2],
             ['number', 'number'],
