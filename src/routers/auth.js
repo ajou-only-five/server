@@ -1,7 +1,6 @@
 import express from "express";
 import session from "express-session";
 
-import bcrypt from "bcrypt";
 
 import UserServices from '../services/user.js';
 import bcrypt from "bcrypt";
