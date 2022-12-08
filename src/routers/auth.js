@@ -50,7 +50,7 @@ router.post("/login", async function (req, res, next) {
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){//정보가 있으면 세션에 저장.
-      if(!result.data.length){ 
+      if(result.data.length!==0){ 
         if(!bcrypt.compareSync(req.body.password,result.data[0][2])){
           return res.status(400).json({
             message:"비밀번호가 틀립니다.",
