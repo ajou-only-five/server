@@ -8,26 +8,15 @@ router.get("/", function (req, res, next) {
   res.send("valid");
   next();
 });
-<<<<<<< HEAD
-router.post("/accountName/exists",async function(req,res,next){
-  const data = {
-    account:req.body.account
-  }
-=======
 router.post("/account/exists",async function(req,res,next){
     
   const data = {account: req.body.account}
 
->>>>>>> d8bc733df980e265f4e8b954c48f9e81c1553094
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){
       if(result.data.length===0){
-<<<<<<< HEAD
-        res.status(200).json({
-=======
         return res.status(200).json({
->>>>>>> d8bc733df980e265f4e8b954c48f9e81c1553094
           message:"해당 acccount를 가진 user가 없습니다."
         })
       }
@@ -47,21 +36,6 @@ router.post("/account/exists",async function(req,res,next){
   }
 })
 router.post("/nickname/exists",async function(req,res,next){
-<<<<<<< HEAD
-  const data = {
-    nickname:req.body.nickname
-  }
-  try{
-    let result = await UserServices.findUserByNickname(data)
-    if(result.status){
-      if(result.data.length===0){
-        res.status(200).json({
-          message:"해당 nickname를 가진 user가 없습니다."
-        })
-      }
-      return res.status(400).json({
-        message:"해당 nickname을 가진 user가 존재합니다"
-=======
   const data = {nickname: req.body.nickname}
     
   try{
@@ -74,7 +48,6 @@ router.post("/nickname/exists",async function(req,res,next){
       }
       return res.status(400).json({
         message:"해당 acoount를 가진 user가 존재합니다"
->>>>>>> d8bc733df980e265f4e8b954c48f9e81c1553094
       })
     }
     else{
