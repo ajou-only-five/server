@@ -4,7 +4,7 @@ import { TypeChecker } from '../utils/index.js';
 export default Object.freeze({
     createFriend: async (req, res, next) => {
         if(!req.session.account){
-            return res.status(400).send("session is expired")
+            return res.status(400).send("session is invalid")
         }
 
         const data = {
@@ -42,9 +42,9 @@ export default Object.freeze({
     },
     deleteFriend: async (req, res, next) => {
         if(!req.session.account){
-            return res.status(400).send("session is expired")
+            return res.status(400).send("session is invalid")
         }
-        
+
         const data = {
             ...req.body
         };
