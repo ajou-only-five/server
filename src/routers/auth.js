@@ -68,10 +68,12 @@ router.post("/login", async function (req, res, next) {
       req.session.password = req.body.password;
       req.session.userId = result.data[0].ID;
 
-  
-
       return res.status(200).json({
-        userId: req.session.userId,
+        userId: result.data[0].ID,
+        account: result.data[0].ACCOUNT,
+        nickname: result.data[0].NICKNAME,
+        profile: result.data[0].PROFILE,
+        disclosure: result.data[0].DISCLOSURE,
         message: "로그인 성공"
       })
     }
@@ -107,3 +109,50 @@ router.post("/logout", async function (req, res, next) {
   }
 })
 export { router as authRouter }
+
+
+// DECLARE
+// 	startAt Date := TO_DATE(CONCAT(CONCAT(EXTRACT(YEAR FROM SYSDATE), EXTRACT(MONTH FROM SYSDATE)), '01000000'), 'YYYYMMDDHH24MISS’);
+// 	endAt Date := ADD_MONTHS(TO_DATE(CONCAT(CONCAT(EXTRACT(YEAR FROM SYSDATE), EXTRACT(MONTH FROM SYSDATE)), '01000000'), 'YYYYMMDDHH24MISS'), 1);
+// 	BEGIN
+
+// 	END;
+
+
+// SELECT * 
+// FROM TODO_TITLE
+// WHERE USER_ID = FOLLOWER_ID
+// OR FOLLOWEE_ID;
+
+// SELECT COUNT(*)
+// FROM TODO_ITEM TI,
+// (
+// 	SELECT id
+// 	FROM TODO_TITLE,
+//   (
+//     SELECT follower_id, followee_id
+//     FROM FOLLOW
+//     WHERE follower_id = user_id
+//     OR followee_id = user_id
+//   )
+// 	WHERE user_id = follower_id
+// 	OR user_id = followee_id
+// ) TT
+// WHERE TI.title_id = TT.id
+// AND START_AT BETWEEN startAt AND endAt
+// OR END_AT BETWEEN startAt AND endAt;
+
+
+
+
+
+
+
+
+
+
+
+// SELECT SYSDATE,
+// TO_DATE(CONCAT(CONCAT(EXTRACT(YEAR FROM SYSDATE), EXTRACT(MONTH FROM SYSDATE)), '01000000'), 'YYYYMMDDHH24MISS'),
+// ADD_MONTHS(TO_DATE(CONCAT(CONCAT(EXTRACT(YEAR FROM SYSDATE), EXTRACT(MONTH FROM SYSDATE)), '01000000'), 'YYYYMMDDHH24MISS'), 1)
+// FROM DUAL;

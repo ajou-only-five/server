@@ -133,7 +133,7 @@ export default Object.freeze({
 
                 result.data.forEach((todo) => {
                     for (const todoTitle of todoAllList) {
-                        if (todo.TITLE_ID === todoTitle.titleId) {
+                        if (todo.TITLE_ID === todoTitle.titleId && todo.CONTENT_ID !== undefined) {
                             todoTitle.todoItemList.push({
                                 contentId: todo.CONTENT_ID,
                                 content: todo.CONTENT,
@@ -151,7 +151,7 @@ export default Object.freeze({
                         todoItemList: [],
                     });
                 });
-
+                
                 return res.status(200).send(todoAllList);
             }
 

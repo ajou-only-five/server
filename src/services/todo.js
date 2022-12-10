@@ -57,7 +57,9 @@ export default {
         try {
             const result = await oracleDbHelper.connection.execute(TodoQuery.createTodoTitle, bind, option);
             const data = {
-                titleId: result.outBinds[0][0]
+                titleId: result.outBinds[0][0],
+                title: title,
+                color: color
             };
             return { status: true, data: data };
         } catch (e) {
@@ -269,14 +271,11 @@ export default {
         const startAt = new Date(year, month - 1);
         const endAt = new Date(year, month, 1);
 
-        const bind = [
-            userId,
-            userId,
-            startAt,
-            endAt,
-            startAt,
-            endAt
-        ];
+        const bind = {
+            userId: userId,
+            startAt: startAt,
+            endAt: endAt,
+        };
 
         const option = {
             outFormat: oracledb.OUT_FORMAT_OBJECT
@@ -285,7 +284,7 @@ export default {
         try {
             const result = await oracleDbHelper.connection.execute(TodoQuery.searchTodoListInMonth, bind, option);
 
-            return { status: true, data: result.rows };
+            return { status: true, data: result.implicitResults[0] };
         } catch (e) {
             console.log(e);
             return { status: false };

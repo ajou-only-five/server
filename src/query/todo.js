@@ -26,26 +26,70 @@ export default Object.freeze({
     /**
      * @param { Number } titleId
      */
-     findTodoTitle : `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
+    findTodoTitle: `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
     /**
      * @param { Number } itemId
      */
-    findTodoItem : `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
+    findTodoItem: `SELECT * FROM TODO_ITEM WHERE id = :itemId`,
     /**
      * @param { Number } userId
      * @param { Number } monthStartAt timestamp
      * @param { Number } monthEndAt timestamp
      */
-    searchTodoListInMonth :`
-        SELECT TI.title_id, TI.id as content_id, TT.title, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
-        FROM TODO_TITLE TT, TODO_ITEM TI 
-        WHERE TT.user_id = :1 
-        AND TT.id = TI.title_id 
-        AND TI.title_id IN (SELECT id FROM TODO_TITLE WHERE user_id = :2) 
-        AND ((TI.start_at BETWEEN :3 AND :4) 
-        OR (TI.end_at BETWEEN :5 AND :6))
-        ORDER BY TI.start_at ASC, create_at ASC
+    searchTodoListInMonth: `
+        DECLARE
+        rc sys_refcursor;
+        is_empty NUMBER(1);
+        BEGIN
+            SELECT CASE WHEN R.length > 0 THEN 1
+            ELSE 0 END AS is_empty
+            INTO is_empty
+            FROM (
+                SELECT COUNT(*) AS length
+                FROM TODO_TITLE TT, TODO_ITEM TI 
+                WHERE TT.user_id = :userId
+                AND TT.id = TI.title_id 
+                AND TI.title_id IN (SELECT id FROM TODO_TITLE WHERE user_id = :userId) 
+                AND (
+                    (TI.start_at BETWEEN :startAt AND :endAt) 
+                    OR (TI.end_at BETWEEN :startAt AND :endAt)
+                )
+                ORDER BY TI.start_at ASC, TI.create_at ASC
+            ) R;
+            
+            IF is_empty = 1 THEN
+                OPEN rc FOR SELECT TI.title_id, TI.id as content_id, TT.title, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
+                FROM TODO_TITLE TT, TODO_ITEM TI 
+                WHERE TT.user_id = :userId
+                AND TT.id = TI.title_id 
+                AND TI.title_id IN (SELECT id FROM TODO_TITLE WHERE user_id = :userId) 
+                AND (
+                    (TI.start_at BETWEEN :startAt AND :endAt) 
+                    OR (TI.end_at BETWEEN :startAt AND :endAt)
+                )
+                ORDER BY TI.start_at ASC, TI.create_at ASC;
+
+                dbms_sql.return_result(rc);
+            ELSE
+                OPEN rc FOR SELECT id AS title_id, title, color
+                FROM TODO_TITLE
+                WHERE user_id = :userId;
+
+                dbms_sql.return_result(rc);
+            END IF;
+        END;
     `,
+
+    // `
+    //     SELECT TI.title_id, TI.id as content_id, TT.title, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
+    //     FROM TODO_TITLE TT, TODO_ITEM TI 
+    //     WHERE TT.user_id = :1 
+    //     AND TT.id = TI.title_id 
+    //     AND TI.title_id IN (SELECT id FROM TODO_TITLE WHERE user_id = :2) 
+    //     AND ((TI.start_at BETWEEN :3 AND :4) 
+    //     OR (TI.end_at BETWEEN :5 AND :6))
+    //     ORDER BY TI.start_at ASC, create_at ASC
+    // `,
     /**
      * @param { String } title
      * @param { String } color

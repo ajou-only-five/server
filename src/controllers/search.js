@@ -20,7 +20,6 @@ export default Object.freeze({
         // only userId
         if (data.start === undefined) {
 
-
             // without nickname 
             if (data.nickname === undefined) {
                 try {

@@ -40,14 +40,13 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserId, bind, option);
-            console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
             return { status: false };
         }
     },
-    /**
+    /**s
      * @namedparam
      * @param { Object } data
      * @property { Number } userId - data.userId, 현재 유저 index
@@ -742,11 +741,15 @@ export default Object.freeze({
             return { status: false };
         }
 
-        const bind = [
-            userId
-        ];
+        const bind = {
+            user_id:userId
+        };
+
+        console.log(userId, nickname);
 
         const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
+        console.log(SearchQuery.searchNotFriendByUserIdAndNickname(nickname));
 
         try {
             const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserIdAndNickname(nickname), bind, option);

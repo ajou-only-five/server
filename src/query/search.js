@@ -3,14 +3,14 @@ export default Object.freeze({
      * @param { Number } userId 본인
      */
     searchFriendByUserId: `
-     SELECT U.id, U.account, U.nickname, U.profile, U.disclosure, 0 as relation
-     FROM USERS U, (
-         SELECT *
-         FROM FOLLOW
-         WHERE follower_id = :userId OR followee_id = :userId
-     ) F
-     WHERE (F.follower_id = :userId AND U.id IN F.followee_id) OR (F.followee_id = :userId AND U.id IN F.follower_id)
-     ORDER BY nickname ASC, id ASC
+            SELECT U.id, U.account, U.nickname, U.profile, U.disclosure, 0 as relation
+            FROM USERS U, (
+                SELECT *    
+                FROM FOLLOW
+                WHERE follower_id = :userId OR followee_id = :userId
+            ) F
+            WHERE (F.follower_id = :userId AND U.id IN F.followee_id) OR (F.followee_id = :userId AND U.id IN F.follower_id)
+            ORDER BY nickname ASC, id ASC  
      `,
     /**
     * @param { Number } userId 본인
@@ -294,17 +294,7 @@ export default Object.freeze({
                     SELECT follower_id
                     FROM FOLLOW
                     WHERE followee_id = :user_id
-                )
-                AND id NOT IN (
-                    SELECT requestee_id
-                    FROM FOLLOW_REQUEST
-                    WHERE requester_id = :user_id
-                )
-                AND id NOT IN (
-                    SELECT requester_id
-                    FROM FOLLOW_REQUEST
-                    WHERE requestee_id = :user_id
-                )
+                )    
             ) THEN 3
              ELSE 0 END as relation
              FROM USERS
@@ -343,16 +333,6 @@ export default Object.freeze({
                     SELECT follower_id
                     FROM FOLLOW
                     WHERE followee_id = :user_id
-                )
-                AND id NOT IN (
-                    SELECT requestee_id
-                    FROM FOLLOW_REQUEST
-                    WHERE requester_id = :user_id
-                )
-                AND id NOT IN (
-                    SELECT requester_id
-                    FROM FOLLOW_REQUEST
-                    WHERE requestee_id = :user_id
                 )
             ) THEN 3
             ELSE 0 END as relation
