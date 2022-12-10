@@ -190,7 +190,7 @@ export default Object.freeze({
             return res.status(500).send("Server error");
         }
     },
-    searchUser: async (req, res, next) => {
+    searchNotFriend: async (req, res, next) => {
         const data = {
             ...req.params
         };
@@ -204,8 +204,74 @@ export default Object.freeze({
 
         data.userId = parseInt(data.userId);
 
+        // only userId
+        if (data.start === undefined) {
+            if (data.nickname === undefined) {
+                // without nickname
+                try {
+                    const result = await SearchServices.searchNotFriendByUserId(data);
+
+                    if (result.status) {
+                        return res.status(200).send(result.data);
+                    }
+
+                    return res.status(500).send("Server error.");
+                } catch (e) {
+                    return res.status(500).send("Server error");
+                }
+            }
+
+            if (!TypeChecker.isString(data.nickname)) {
+                return res.status(400).send("nickname must be string.");
+            }
+
+            // with nickname
+            try {
+                const result = await SearchServices.searchNotFriendByUserIdAndNickname(data);
+
+                if (result.status) {
+                    return res.status(200).send(result.data);
+                }
+
+                return res.status(500).send("Server error.");
+            } catch (e) {
+                return res.status(500).send("Server error");
+            }
+        }
+
+        if (!TypeChecker.isInteger(data.start)) {
+            return res.status(400).send("start must be integer.");
+        }
+        if (data.end === undefined) {
+            return res.status(400).send("end must be required.");
+        }
+        if (!TypeChecker.isInteger(data.end)) {
+            return res.status(400).send("end must be integer.");
+        }
+
+        data.start = parseInt(data.start);
+        data.end = parseInt(data.end);
+
+        // between start and end without nickname 
+        if (data.nickname === undefined) {
+            try {
+                const result = await SearchServices.searchNotFriendByUserIdBetweenStartAndEnd(data);
+
+                if (result.status) {
+                    return res.status(200).send(result.data);
+                }
+
+                return res.status(500).send("Server error.");
+            } catch (e) {
+                return res.status(500).send("Server error");
+            }
+        }
+        if (!TypeChecker.isString(data.nickname)) {
+            return res.status(400).send("nickname must be string.");
+        }
+
         try {
-            const result = await SearchServices.searchFriendRequestedByUserId(data);
+            const result = await SearchServices.searchNotFriendByUserIdAndNicknameBetweenStartAndEnd(data);
 
             if (result.status) {
                 return res.status(200).send(result.data);
