@@ -1,14 +1,14 @@
 import oracledb from 'oracledb';
 import oracleDbHelper from '../db/index.js';
 import { TypeChecker } from '../utils/index.js';
-import FriendQuery from '../query/friend.js';
+import FollowQuery from '../query/follow.js';
 
 export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data
-     * @property { Number } userId_1 - data.userId_1, 친구 1
-     * @property { Number } userId_2 - data.userId_2, 친구 2
+     * @property { Number } userId - data.userId, 유저 id
+     * @property { Number } followerId - data.followerId, 팔로워 id
      * 
      * @return { Object } 
      * @property { Boolean } status
@@ -30,9 +30,9 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    createFriend: async ({ userId_1, userId_2 }) => {
+    createFollow: async ({ userId, followerID }) => {
         const typeCheckData = [
-            [userId_1, userId_2],
+            [userId, followerID],
             ['number', 'number'],
         ];
 
@@ -43,8 +43,8 @@ export default Object.freeze({
         }
 
         const bind = [
-            userId_1,
-            userId_2,
+            userId,
+            followerID,
             new Date(Date.now()),
             {
                 dir: oracledb.BIND_OUT,
@@ -57,9 +57,9 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(FriendQuery.createFriend, bind, option);
+            const result = await oracleDbHelper.connection.execute(FollowQuery.createFollow, bind, option);
             const data = {
-                titleId: result.outBinds[0][0]
+                friendId: result.outBinds[0][0]
             };
             return { status: true, data: data };
         } catch (e) {
@@ -68,51 +68,10 @@ export default Object.freeze({
         }
     },
     /**
-     * @namedparam
-     * @param { Object } data
-     * @property { Number } userId - data.userId, 현재 유저 index
-     * 
-     * @return { Object } 
-     * @property { Boolean } status
-     * @property { Array<User> } data
-     * 
-     * @description
-     * ```js
-     * // 친구 검색이 완료 되었을 경우
-     * { 
-     *  status : true, 
-     *  data: []
-     * } 
-     * 
-     * // parameter 타입이 맞지 않을 경우
-     * // 친구 검색이 완료되지 않았을 경우
-     * // 해당 정보가 DB에 저장되지 않았을 경우
-     * { status : false }
-     * ```
-     */
-     searchFriendByUserId: async ({ userId }) => {
-        if(!TypeChecker.isNumber(userId)) {
-            return { status: false };
-        }
-
-        const bind = [
-            userId
-        ];
-
-        try {
-            const result = await oracleDbHelper.connection.execute(FriendQuery.searchFriendByUserId, bind);
-            console.log(result);
-            return { status: true, data: result.rows };
-        } catch (e) {
-            console.log(e);
-            return { status: false };
-        }
-    },
-    /**
     * @namedparam
     * @param { Object } data
-    * @property { Number } userId_1 - data.userId_1, 친구 1
-    * @property { Number } userId_2 - data.userId_2, 친구 2
+    * @property { Number } userId - data.userId, 친구 1
+    * @property { Number } friendId - data.friendId, 친구 2
     * 
     * @return { Object } 
     * @property { Boolean } status
@@ -134,9 +93,9 @@ export default Object.freeze({
     * { status : false }
     * ```
     */
-    deleteFriend: async ({ userId_1, userId_2 }) => {
+    deleteFriend: async ({ userId, friendId }) => {
         const typeCheckData = [
-            [userId_1, userId_2],
+            [userId, friendId],
             ['number', 'number'],
         ];
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -146,8 +105,8 @@ export default Object.freeze({
         }
 
         const bind = [
-            userId_1,
-            userId_2
+            userId,
+            friendId
         ];
 
         const option = {
@@ -155,7 +114,7 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(FriendQuery.deleteFriend, bind, option);
+            const result = await oracleDbHelper.connection.execute(FollowQuery.deleteFriend, bind, option);
             return { status: true };
         } catch (e) {
             console.log(e);

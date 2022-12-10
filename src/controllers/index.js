@@ -1,11 +1,11 @@
 import TodoController from './todo.js';
-import FriendRequestController from './friendRequest.js';
-import FriendController from './friend.js';
+import FollowRequestController from './followRequest.js';
+import FollowController from './follow.js';
 import SearchController from './search.js';
 
 export {
     TodoController,
-    FriendRequestController,
-    FriendController,
+    FollowRequestController,
+    FollowController,
     SearchController
 };

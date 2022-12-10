@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 
 import UserServices from '../services/user.js';
 import TodoServices from '../services/todo.js';
-import FriendServices from '../services/friend.js';
+import FriendServices from '../services/follow.js';
+import SearchServices from "../services/search.js";
 
 const router = express.Router();
 
@@ -150,8 +151,9 @@ router.get('/todoitem/search', async function (req, res, next) {
 });
 
 router.get('/searchFriend', async function (req, res, next) {
+    console.log("hello");
     try {
-        const result = await FriendServices.searchFriendByUserId({ userId: parseInt(req.query.userId) });
+        const result = await SearchServices.searchFriendByUserId({ userId: parseInt(req.query.userId) });
 
         if (result.status) {
             res.status(200).json({ status: true });

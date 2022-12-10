@@ -133,20 +133,21 @@ export default Object.freeze({
 
                 result.data.forEach((todo) => {
                     for (const todoTitle of todoAllList) {
-                        if (todo.titleId === todoTitle.titleId) {
+                        if (todo.TITLE_ID === todoTitle.titleId) {
                             todoTitle.todoItemList.push({
-                                content: todo.content,
-                                startAt: todo.startAt,
-                                endAt: todo.endAt,
-                                isChecked: todo.isChecked,
+                                contentId: todo.CONTENT_ID,
+                                content: todo.CONTENT,
+                                startAt: todo.START_AT,
+                                endAt: todo.END_AT,
+                                isChecked: todo.IS_CHECKED,
                             });
                             return;
                         }
                     }
 
                     todoAllList.push({
-                        titleId: todo.titleId,
-                        title: todo.title,
+                        titleId: todo.TITLE_ID,
+                        title: todo.TITLE,
                         todoItemList: [],
                     });
                 });

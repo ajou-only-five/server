@@ -7,14 +7,14 @@ import logger from "morgan";
 const __dirname = path.resolve();
 import oracleDbHelper from './src/db/index.js';
 import indexRouter from "./src/routers/index.js";
-import { usersRouter } from "./src/routers/users.js";
 import todoRouter from "./src/routers/todo.js";
-import friendRouter from "./src/routers/friend.js";
-import friendRequestRouter from "./src/routers/friendRequest.js";
+import followRouter from "./src/routers/follow.js";
+import followRequestRouter from "./src/routers/followRequest.js";
 import searchRouter from "./src/routers/search.js";
 import { myInfoRouter } from "./src/routers/myInfo.js";
 import { authRouter } from "./src/routers/auth.js";
 import { validRouter } from "./src/routers/valid.js";
+import dummyRouter from './src/routers/dummy.js';
 const app = express();
 
 app.use(logger("dev"));
@@ -52,14 +52,14 @@ app.get("/api/ss", function (req, res) {
   res.send("ss")
 })
 app.use('/api/', indexRouter);
-app.use('/api/users', usersRouter);
 app.use('/api/todo', todoRouter);
-app.use('/api/friend', friendRouter);
-app.use('/api/friendRequest', friendRequestRouter);
+app.use('/api/follow', followRouter);
+app.use('/api/followRequest', followRequestRouter);
 app.use("/api/myInfo", myInfoRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/valid", validRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/dummy", dummyRouter);
 
 app.use((req, res, next) => {
   res.status(404).send('Not Found');

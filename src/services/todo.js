@@ -278,29 +278,14 @@ export default {
             endAt
         ];
 
+        const option = {
+            outFormat: oracledb.OUT_FORMAT_OBJECT
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.searchTodoListInMonth, bind);
+            const result = await oracleDbHelper.connection.execute(TodoQuery.searchTodoListInMonth, bind, option);
 
-            let dataList = [];
-
-            if (result.rows.length === 0) {
-                return { status: true, data: result.rows };
-            }
-
-            for (const data of result.rows) {
-                dataList.push({
-                    titleId: data[0],
-                    itemId: data[1],
-                    title: data[2],
-                    content: data[3],
-                    startAt: data[4],
-                    endAt: data[5],
-                    isChecked: data[6],
-                    createAt: data[7]
-                });
-            }
-
-            return { status: true, data: dataList };
+            return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
             return { status: false };

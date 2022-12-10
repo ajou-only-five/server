@@ -5,7 +5,7 @@ export default Object.freeze({
     // 친구 목록
     searchFriend: async (req, res, next) => {
         const data = {
-            ...req.params
+            ...req.query
         };
 
         if (data.userId === undefined) {
@@ -98,9 +98,9 @@ export default Object.freeze({
         }
     },
     // 요청 받은 친구 목록
-    searchFriendRequsted: async (req, res, next) => {
+    searchFriendRequested: async (req, res, next) => {
         const data = {
-            ...req.params
+            ...req.query
         };
 
         if (data.userId === undefined) {
@@ -192,7 +192,7 @@ export default Object.freeze({
     },
     searchNotFriend: async (req, res, next) => {
         const data = {
-            ...req.params
+            ...req.query
         };
 
         if (data.userId === undefined) {

@@ -36,8 +36,10 @@ export default Object.freeze({
             userId
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserId, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserId, bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -80,8 +82,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserIdBetween, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserIdBetween, bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -123,8 +127,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserIdAndNickname(nickname), bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserIdAndNickname(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -168,6 +174,8 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
             const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendByUserIdAndNicknameBetween(nickname), bind);
             console.log(result);
@@ -207,9 +215,11 @@ export default Object.freeze({
         const bind = [
             userId
         ];
+        
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
 
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserId, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserId, bind, option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -251,8 +261,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserIdBetween, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserIdBetween, bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -292,8 +304,10 @@ export default Object.freeze({
             userId,
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserIdAndNickname(nickname), bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserIdAndNickname(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -337,8 +351,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserIdAndNicknameBetween(nickname), bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestByUserIdAndNicknameBetween(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -377,8 +393,10 @@ export default Object.freeze({
             userId
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserId, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserId, bind, option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -420,8 +438,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdBetween, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdBetween, bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -461,8 +481,10 @@ export default Object.freeze({
             userId,
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdAndNickname(nickname), bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdAndNickname(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -506,8 +528,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdAndNicknameBetween(nickname), bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchFriendRequestedByUserIdAndNicknameBetween(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -546,8 +570,10 @@ export default Object.freeze({
             userId
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendAndNotRequestedByUserId, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendAndNotRequestedByUserId, bind, option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -588,9 +614,11 @@ export default Object.freeze({
             start,
             end
         ];
+        
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
 
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendAndNotRequestedByUserIdBetween, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendAndNotRequestedByUserIdBetween, bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -634,8 +662,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendAndNotRequestedByUserIdAndNicknameBetween(nickname), bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendAndNotRequestedByUserIdAndNicknameBetween(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -665,7 +695,7 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-     searchNotFriendByUserId: async ({ userId }) => {
+    searchNotFriendByUserId: async ({ userId }) => {
         if (!TypeChecker.isNumber(userId)) {
             return { status: false };
         }
@@ -674,8 +704,10 @@ export default Object.freeze({
             userId
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserId, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserId, bind, option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -705,19 +737,19 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-     searchNotFriendByUserIdAndNickname: async ({ userId, start, end }) => {
+    searchNotFriendByUserIdAndNickname: async ({ userId, nickname}) => {
         if (!TypeChecker.isNumber(userId)) {
             return { status: false };
         }
 
         const bind = [
-            userId,
-            start,
-            end
+            userId
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserIdAndNickname, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserIdAndNickname(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -749,7 +781,7 @@ export default Object.freeze({
          * { status : false }
          * ```
          */
-     searchNotFriendByUserIdBetweenStartAndEnd: async ({ userId, start, end }) => {
+    searchNotFriendByUserIdBetweenStartAndEnd: async ({ userId, start, end }) => {
         if (!TypeChecker.isNumber(userId)) {
             return { status: false };
         }
@@ -760,8 +792,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserIdBetweenStartAndEnd, bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserIdBetweenStartAndEnd, bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {
@@ -805,8 +839,10 @@ export default Object.freeze({
             end
         ];
 
+        const option = { outFormat: oracledb.OUT_FORMAT_OBJECT };
+
         try {
-            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserIdAndNicknameBetweenStartAndEnd(nickname), bind);
+            const result = await oracleDbHelper.connection.execute(SearchQuery.searchNotFriendByUserIdAndNicknameBetweenStartAndEnd(nickname), bind, option);
             console.log(result);
             return { status: true, data: result.rows };
         } catch (e) {

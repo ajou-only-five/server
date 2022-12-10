@@ -37,7 +37,7 @@ export default Object.freeze({
      * @param { Number } monthEndAt timestamp
      */
     searchTodoListInMonth :`
-        SELECT TI.title_id, TI.id as item_id, TT.title, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
+        SELECT TI.title_id, TI.id as content_id, TT.title, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
         FROM TODO_TITLE TT, TODO_ITEM TI 
         WHERE TT.user_id = :1 
         AND TT.id = TI.title_id 

@@ -73,7 +73,8 @@ export default Object.freeze({
         ];
 
         const option = { 
-            autoCommit: true 
+            autoCommit: true,
+            outFormat: oracledb.OUT_FORMAT_OBJECT,
         };
 
         try {
@@ -130,7 +131,7 @@ export default Object.freeze({
         ];
 
         const option = {
-            autoCommit: true
+            outFormat: oracledb.OUT_FORMAT_OBJECT
         };
 
         try {
@@ -183,9 +184,13 @@ export default Object.freeze({
         const bind = [
             nickname,
         ];
+        
+        const option = {
+            outFormat: oracledb.OUT_FORMAT_OBJECT
+        };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind);
+            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind, option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -247,8 +252,12 @@ export default Object.freeze({
             nickname: nickname
         };
 
+        const option = {
+            outFormat: oracledb.OUT_FORMAT_OBJECT
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNickname(bind));
+            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNickname(bind), option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
@@ -322,8 +331,12 @@ export default Object.freeze({
             end: end
         };
 
+        const option = {
+            outFormat: oracledb.OUT_FORMAT_OBJECT
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNicknameBetween(bind));
+            const result = await oracleDbHelper.connection.execute(UserQuery.searchUsersByNicknameBetween(bind), option);
             return { status: true, data: result.rows };
         } catch (e) {
             console.log(e);
