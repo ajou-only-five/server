@@ -4,11 +4,13 @@ import FriendController from './friend.js';
 import SearchController from './search.js';
 import AuthController from './auth.js';
 import ValidController from './valid.js'
+import MyInfoController from './myInfo.js';
 export {
     TodoController,
     FriendRequestController,
     FriendController,
     SearchController,
     AuthController,
-    ValidController
+    ValidController,
+    MyInfoController
 };
