@@ -85,7 +85,7 @@ export default Object.freeze({
         try{
             await req.session.destroy(function(err){
             if(err){
-                return res.status(400).send("Fail to logout");
+                return res.status(500).send("Fail to logout");
             }
             else{
                 return res.status(200).send("Success to logout.")
