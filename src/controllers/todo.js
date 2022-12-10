@@ -3,7 +3,6 @@ import { TypeChecker } from '../utils/index.js';
 
 export default Object.freeze({
     createTodoTitle: async (req, res, next) => {
-        console.log(req.body);
         const data = {
             ...req.body
         };
@@ -132,26 +131,43 @@ export default Object.freeze({
                 let todoAllList = [];
 
                 result.data.forEach((todo) => {
-                    for (const todoTitle of todoAllList) {
-                        if (todo.TITLE_ID === todoTitle.titleId && todo.CONTENT_ID !== undefined) {
-                            todoTitle.todoItemList.push({
+                    const todoTitle = todoAllList.find((element) => element.titleId === todo.TITLE_ID);
+
+                    if (todoTitle === undefined) {
+                        if(todo.CONTENT_ID === undefined) {
+                            todoAllList.push({
+                                titleId: todo.TITLE_ID,
+                                title: todo.TITLE,
+                                color: todo.COLOR,
+                                todoItemList: [],
+                            });
+                            return;
+                        }
+                        
+                        todoAllList.push({
+                            titleId: todo.TITLE_ID,
+                            title: todo.TITLE,
+                            color: todo.COLOR,
+                            todoItemList: [{
                                 contentId: todo.CONTENT_ID,
                                 content: todo.CONTENT,
                                 startAt: todo.START_AT,
                                 endAt: todo.END_AT,
                                 isChecked: todo.IS_CHECKED,
-                            });
-                            return;
-                        }
+                            }],
+                        });
+                        return;
                     }
 
-                    todoAllList.push({
-                        titleId: todo.TITLE_ID,
-                        title: todo.TITLE,
-                        todoItemList: [],
+                    todoTitle.todoItemList.push({
+                        contentId: todo.CONTENT_ID,
+                        content: todo.CONTENT,
+                        startAt: todo.START_AT,
+                        endAt: todo.END_AT,
+                        isChecked: todo.IS_CHECKED,
                     });
                 });
-                
+
                 return res.status(200).send(todoAllList);
             }
 

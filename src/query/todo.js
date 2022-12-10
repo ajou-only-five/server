@@ -58,7 +58,7 @@ export default Object.freeze({
             ) R;
             
             IF is_empty = 1 THEN
-                OPEN rc FOR SELECT TI.title_id, TI.id as content_id, TT.title, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
+                OPEN rc FOR SELECT TI.title_id, TI.id as content_id, TT.title, TT.color, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
                 FROM TODO_TITLE TT, TODO_ITEM TI 
                 WHERE TT.user_id = :userId
                 AND TT.id = TI.title_id 
