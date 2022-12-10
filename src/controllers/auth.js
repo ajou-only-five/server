@@ -5,7 +5,9 @@ import bcrypt from "bcrypt";
 export default Object.freeze({
     createUser: async(req,res,next)=>{
         const data = {
-            ...req.body
+            ...req.body,
+            profile:"default",
+            disclosure:0
         };
         if (data.account === undefined) {
             return res.status(400).send("account must be required.");
