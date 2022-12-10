@@ -45,7 +45,6 @@ router.post("/login", async function (req, res, next) {
   const data={
     account:req.body.account,
   };
-
   try{
     let result = await UserServices.findUserByAccount(data)
     if(result.status){//정보가 있으면 세션에 저장.
@@ -89,6 +88,11 @@ router.post("/logout", async function (req, res, next) {
         else{
           return res.status(200).json({message:"로그아웃 성공"})
         }
+      })
+    }
+    else{
+      return res.status(400).json({
+        message:"세션이 이미 삭제되었습니다."
       })
     }
   }catch(err){

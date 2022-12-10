@@ -53,18 +53,6 @@ app.get("/api/ss", function (req, res) {
 })
 app.use('/api/', indexRouter);
 app.use('/api/users', usersRouter);
-<<<<<<< HEAD
-app.use("/api/todoItem", todoItemRouter);
-app.use("/api/todoItemDone", todoItemDoneRouter);
-app.use("/api/follow", followRouter);
-app.use("/api/myInfo", myInfoRouter);
-app.use("/apiapi/search", searchRouter);
-app.use("/api/todoTitle", todoTitleRouter);
-app.use("/api/valid", validRouter);
-app.use("/api/auth", authRouter);
-/*
- */
-=======
 app.use('/api/todo', todoRouter);
 app.use('/api/friend', friendRouter);
 app.use('/api/friendRequest', friendRequestRouter);
@@ -73,12 +61,11 @@ app.use("/api/search", searchRouter);
 app.use("/api/valid", validRouter);
 app.use("/api/auth", authRouter);
 
->>>>>>> d8bc733df980e265f4e8b954c48f9e81c1553094
 app.use((req, res, next) => {
   res.status(404).send('Not Found');
 });
 
-app.listen(3000, function () {
+app.listen(3003, function () {
   console.log('Express server is listening');
 });
 
