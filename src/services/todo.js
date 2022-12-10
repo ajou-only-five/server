@@ -160,9 +160,15 @@ export default {
 
         try {
             const result = await oracleDbHelper.connection.execute(TodoQuery.createTodoItem, bind, option);
+
             const data = {
-                itemId: result.outBinds[0][0]
+                contentId: result.outBinds[0][0],
+                content: content,
+                startAt: _startAt,
+                endAt: _endAt,
+                isChecked: 0
             };
+            
             return { status: true, data: data };
         } catch (e) {
             console.log(e);

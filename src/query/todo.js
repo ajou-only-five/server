@@ -58,16 +58,43 @@ export default Object.freeze({
             ) R;
             
             IF is_empty = 1 THEN
-                OPEN rc FOR SELECT TI.title_id, TI.id as content_id, TT.title, TT.color, TI.content, TI.start_at, TI.end_at, TI.is_checked, TI.create_at
-                FROM TODO_TITLE TT, TODO_ITEM TI 
-                WHERE TT.user_id = :userId
-                AND TT.id = TI.title_id 
-                AND TI.title_id IN (SELECT id FROM TODO_TITLE WHERE user_id = :userId) 
-                AND (
-                    (TI.start_at BETWEEN :startAt AND :endAt) 
-                    OR (TI.end_at BETWEEN :startAt AND :endAt)
-                )
-                ORDER BY TI.start_at ASC, TI.create_at ASC;
+                OPEN rc FOR SELECT 
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.title_id
+                ELSE NEI.title_id END AS title_id,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.content_id
+                ELSE NULL END AS content_id,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.title
+                ELSE NEI.title END AS title,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.color
+                ELSE NEI.color END AS color,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.content
+                ELSE NULL END AS content,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.start_at
+                ELSE NULL END AS start_at,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.end_at
+                ELSE NULL END AS end_at,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.is_checked
+                ELSE NULL END AS is_checked,
+                CASE WHEN EI.title_id = NEI.title_id THEN EI.create_at
+                ELSE NEI.create_at END AS create_at
+                FROM (
+                    SELECT TI.title_id, TI.id as content_id, TT.title, TT.color, TI.content, TI.start_at, TI.end_at, TI.is_checked, TT.create_at
+                    FROM TODO_TITLE TT, TODO_ITEM TI 
+                    WHERE TT.user_id = :userId
+                    AND TT.id = TI.title_id 
+                    AND TI.title_id IN (SELECT id FROM TODO_TITLE WHERE user_id = :userId) 
+                    AND (
+                        (TI.start_at BETWEEN :startAt AND :endAt) 
+                        OR (TI.end_at BETWEEN :startAt AND :endAt)
+                    )
+                    ORDER BY TI.start_at ASC, TI.create_at ASC
+                ) EI,
+                (
+                    SELECT id AS title_id, title, color, create_at
+                    FROM TODO_TITLE
+                    WHERE user_id = :userId
+                ) NEI
+                ORDER BY create_at ASC;
 
                 dbms_sql.return_result(rc);
             ELSE

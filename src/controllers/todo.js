@@ -134,7 +134,7 @@ export default Object.freeze({
                     const todoTitle = todoAllList.find((element) => element.titleId === todo.TITLE_ID);
 
                     if (todoTitle === undefined) {
-                        if(todo.CONTENT_ID === undefined) {
+                        if(todo.CONTENT_ID === undefined || todo.CONTENT_ID === null) {
                             todoAllList.push({
                                 titleId: todo.TITLE_ID,
                                 title: todo.TITLE,
@@ -143,7 +143,7 @@ export default Object.freeze({
                             });
                             return;
                         }
-                        
+
                         todoAllList.push({
                             titleId: todo.TITLE_ID,
                             title: todo.TITLE,
@@ -159,6 +159,10 @@ export default Object.freeze({
                         return;
                     }
 
+                    if(todo.CONTENT_ID === undefined || todo.CONTENT_ID === null) {
+                        return;
+                    }
+                    
                     todoTitle.todoItemList.push({
                         contentId: todo.CONTENT_ID,
                         content: todo.CONTENT,

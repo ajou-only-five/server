@@ -11,10 +11,10 @@ import todoRouter from "./src/routers/todo.js";
 import followRouter from "./src/routers/follow.js";
 import followRequestRouter from "./src/routers/followRequest.js";
 import searchRouter from "./src/routers/search.js";
+import onlyFiveRouter from "./src/routers/onlyFive.js";
 import { myInfoRouter } from "./src/routers/myInfo.js";
 import { authRouter } from "./src/routers/auth.js";
 import { validRouter } from "./src/routers/valid.js";
-import dummyRouter from './src/routers/dummy.js';
 const app = express();
 
 app.use(logger("dev"));
@@ -57,9 +57,9 @@ app.use('/api/follow', followRouter);
 app.use('/api/followRequest', followRequestRouter);
 app.use("/api/myInfo", myInfoRouter);
 app.use("/api/search", searchRouter);
+app.use('./api/onlyFive', onlyFiveRouter);
 app.use("/api/valid", validRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/dummy", dummyRouter);
 
 app.use((req, res, next) => {
   res.status(404).send('Not Found');
