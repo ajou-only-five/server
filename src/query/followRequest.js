@@ -15,7 +15,14 @@ export default Object.freeze({
      */
     deleteFollowRequest: `
         DELETE FROM FOLLOW_REQUEST 
-        WHERE (requesterId = :userId AND requesteeId = :targetUserId)
-        OR (requesterId = :targetUserId AND requesteeId = :userId)
+        WHERE requester_id = :userId AND requestee_id = :targetUserId
+        `,
+    /**
+     * @param { Number } userId 친구 요청 받은 사람
+     * @param { Number } targetUserId 친구 요청 보낸 사람
+     */
+    deleteFollowRequested: `
+        DELETE FROM FOLLOW_REQUEST 
+        WHERE requester_id = :targetUserId AND requestee_id = :userId
         `,
 });

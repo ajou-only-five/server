@@ -57,7 +57,7 @@ app.use('/api/follow', followRouter);
 app.use('/api/followRequest', followRequestRouter);
 app.use("/api/myInfo", myInfoRouter);
 app.use("/api/search", searchRouter);
-app.use('./api/onlyFive', onlyFiveRouter);
+app.use('/api/onlyFive', onlyFiveRouter);
 app.use("/api/valid", validRouter);
 app.use("/api/auth", authRouter);
 

@@ -30,9 +30,9 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    createFollow: async ({ userId, followerID }) => {
+    createFollow: async ({ userId, followerId }) => {
         const typeCheckData = [
-            [userId, followerID],
+            [userId, followerId],
             ['number', 'number'],
         ];
 
@@ -42,15 +42,10 @@ export default Object.freeze({
             return false;
         }
 
-        const bind = [
-            userId,
-            followerID,
-            new Date(Date.now()),
-            {
-                dir: oracledb.BIND_OUT,
-                type: oracledb.NUMBER
-            }
-        ];
+        const bind = {
+            targetUserId: followerId,
+            userId: userId,
+        };
 
         const option = {
             autoCommit: true
@@ -58,10 +53,7 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(FollowQuery.createFollow, bind, option);
-            const data = {
-                friendId: result.outBinds[0][0]
-            };
-            return { status: true, data: data };
+            return { status: true};
         } catch (e) {
             console.log(e);
             return { status: false };

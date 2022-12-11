@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.post('/', FollowRequestController.createFollowRequest);
 
-router.delete('/', FollowRequestController.deleteFollowRequest);
+router.delete('/request', FollowRequestController.deleteFollowRequest);
+router.delete('/requested', FollowRequestController.deleteFollowRequested);
 
 export default router;

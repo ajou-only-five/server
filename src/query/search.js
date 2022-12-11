@@ -223,9 +223,9 @@ export default Object.freeze({
     * @param { Number } userId 본인
     */
     searchNotFriendByUserId: `
-        SELECT user_id, account, nickname, profile, disclosure, relation
+        SELECT id, account, nickname, profile, disclosure, relation
         FROM (
-            SELECT id as user_id, account, nickname, profile, disclosure,  
+            SELECT id, account, nickname, profile, disclosure,  
             CASE WHEN id IN (
                 SELECT requestee_id
                 FROM FOLLOW_REQUEST
@@ -270,9 +270,9 @@ export default Object.freeze({
     * @param { String } nickname 검색하려는 닉네임
     */
     searchNotFriendByUserIdAndNickname: (nickname) => `
-         SELECT user_id, account, nickname, profile, disclosure, relation
+         SELECT id, account, nickname, profile, disclosure, relation
          FROM (
-             SELECT id as user_id, account, nickname, profile, disclosure,  
+             SELECT id, account, nickname, profile, disclosure,  
              CASE WHEN id IN (
                 SELECT requestee_id
                 FROM FOLLOW_REQUEST
@@ -309,9 +309,9 @@ export default Object.freeze({
    * @param { Number } end 종료 범위
    */
     searchNotFriendByUserIdBetweenStartAndEnd: `
-        SELECT user_id, account, nickname, profile, disclosure, relation
+        SELECT id, account, nickname, profile, disclosure, relation
         FROM (
-            SELECT ROWNUM as NUM, id as user_id, account, nickname, profile, U.disclosure,  
+            SELECT ROWNUM as NUM, id, account, nickname, profile, U.disclosure,  
             CASE WHEN id IN (
                 SELECT requestee_id
                 FROM FOLLOW_REQUEST
@@ -349,9 +349,9 @@ export default Object.freeze({
    * @param { Number } end 종료 범위
    */
     searchNotFriendByUserIdAndNicknameBetweenStartAndEnd: (nickname) => `
-          SELECT user_id, account, nickname, profile, disclosure, relation
+          SELECT id, account, nickname, profile, disclosure, relation
           FROM (
-              SELECT id as user_id, account, nickname, profile, disclosure,  
+              SELECT id, account, nickname, profile, disclosure,  
               CASE WHEN id IN (
                 SELECT requestee_id
                 FROM FOLLOW_REQUEST

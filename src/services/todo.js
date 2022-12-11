@@ -168,7 +168,7 @@ export default {
                 endAt: _endAt,
                 isChecked: 0
             };
-            
+
             return { status: true, data: data };
         } catch (e) {
             console.log(e);
@@ -372,12 +372,12 @@ export default {
      * { status : false }
      * ```
      */
-    updateTodoItemByItemId: async ({ content, startAt, endAt, isChecked, itemId }) => {
+    updateTodoItemByItemId: async ({ content, startAt, endAt, isChecked, contentId }) => {
         let isStartAtNull = null;
         let isEndAtNull = null;
 
         const typeCheckData = [
-            [content, isChecked, itemId],
+            [content, isChecked, contentId],
             ['string', 'number', 'number'],
         ];
 
@@ -422,7 +422,7 @@ export default {
                 isChecked,
                 new Date(Date.now()),
                 new Date(Date.now()),
-                itemId,
+                contentId,
             ];
 
             try {
@@ -440,8 +440,8 @@ export default {
             _endAt,
             isChecked,
             new Date(Date.now()),
-            null,
-            itemId,
+            // null,
+            contentId,
         ];
 
         try {
@@ -511,18 +511,21 @@ export default {
     * { status : false }
     * ```
     */
-    deleteTodoItem: async ({ itemId }) => {
-        if (!TypeChecker.isNumber(itemId)) {
+    deleteTodoItem: async ({ contentId }) => {
+        if (!TypeChecker.isNumber(contentId)) {
             return { status: false };
         }
 
         const bind = [
-            itemId,
+            contentId,
         ];
 
+        const option = {
+            autoCommit: true
+        };
+
         try {
-            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoItem, bind);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(TodoQuery.deleteTodoItem, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);

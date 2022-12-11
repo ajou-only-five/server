@@ -93,9 +93,9 @@ export default Object.freeze({
     * { status : false }
     * ```
     */
-    deleteFollowRequest: async ({ userId, targetUserId }) => {
+    deleteFollowRequest: async ({ userId, requesteeId }) => {
         const typeCheckData = [
-            [userId, targetUserId],
+            [userId, requesteeId],
             ['number', 'number'],
         ];
 
@@ -107,7 +107,7 @@ export default Object.freeze({
 
         const bind = [
             userId,
-            targetUserId
+            requesteeId
         ];
 
         const option = {
@@ -116,6 +116,61 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(FollowRequestedQuery.deleteFollowRequest, bind, option);
+            return { status: true };
+        } catch (e) {
+            console.log(e);
+            return { status: false };
+        }
+    },
+    /**
+    * @namedparam
+    * @param { Object } data
+    * @property { Number } userId - data.userId, 친구 요청 보낸 사람
+    * @property { Number } targetUserId - data.targetUserId, 친구 요청 받은 사람
+    * 
+    * @return { Object } 
+    * @property { Boolean } status
+    * @property { Number } friendRequestId
+    * 
+    * @description
+    * ```js
+    * // 친구 요청 삭제가 정상적으로 완료되고, 해당 정보가 DB에 저장 됐을 경우
+    * { 
+    *  status : true, 
+    *  data: {
+    *          friendRequestId: 0
+    *      }
+    * } 
+    * 
+    * // parameter 타입이 맞지 않을 경우
+    * // 친구 요청 삭제가 완료되지 않았을 경우
+    * // 해당 정보가 DB에 저장되지 않았을 경우
+    * { status : false }
+    * ```
+    */
+    deleteFollowRequested: async ({ userId, requesterId }) => {
+        const typeCheckData = [
+            [userId, requesterId],
+            ['number', 'number'],
+        ];
+
+        const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
+
+        if (typeCheckResult) {
+            return false;
+        }
+
+        const bind = [
+            requesterId,
+            userId
+        ];
+
+        const option = {
+            autoCommit: true
+        };
+
+        try {
+            const result = await oracleDbHelper.connection.execute(FollowRequestedQuery.deleteFollowRequested, bind, option);
             return { status: true };
         } catch (e) {
             console.log(e);

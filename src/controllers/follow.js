@@ -60,6 +60,8 @@ export default Object.freeze({
         try {
             const result = await FollowServices.deleteFriend(data);
 
+            // 삭제된 row가 없을 때
+
             if (result.status) {
                 return res.status(200).send(result.data);
             }

@@ -154,6 +154,7 @@ export default Object.freeze({
                                 startAt: todo.START_AT,
                                 endAt: todo.END_AT,
                                 isChecked: todo.IS_CHECKED,
+                                titleId: todo.TITLE_ID
                             }],
                         });
                         return;
@@ -169,6 +170,7 @@ export default Object.freeze({
                         startAt: todo.START_AT,
                         endAt: todo.END_AT,
                         isChecked: todo.IS_CHECKED,
+                        titleId: todo.TITLE_ID
                     });
                 });
 
@@ -223,11 +225,13 @@ export default Object.freeze({
             ...req.body
         };
 
-        if (data.itemId === undefined) {
-            return res.status(400).send("itemId must be required.");
+        console.log(data.isChecked);
+
+        if (data.contentId === undefined) {
+            return res.status(400).send("contentId must be required.");
         }
-        if (!TypeChecker.isInteger(data.itemId)) {
-            return res.status(400).send("itemId must be integer.");
+        if (!TypeChecker.isInteger(data.contentId)) {
+            return res.status(400).send("contentId must be integer.");
         }
         if (data.content === undefined) {
             return res.status(400).send("contenst must be required.");
@@ -238,7 +242,8 @@ export default Object.freeze({
         if (data.isChecked === undefined) {
             return res.status(400).send("isChecked must be required.");
         }
-        if (data.isChecked === 0 || data.isChecked === 1) {
+        if (data.isChecked !== 0 && data.isChecked !== 1) {
+            console.log(data.isChecked);
             return res.status(400).send("isChecked must be 0 or 1.");
         }
 
@@ -262,7 +267,7 @@ export default Object.freeze({
             data.endAt = endAt;
         }
 
-        data.itemId = parseInt(data.isChecked);
+        data.contentId = parseInt(data.contentId);
 
         try {
             const result = await TodoServices.updateTodoItemByItemId(data);
@@ -307,14 +312,16 @@ export default Object.freeze({
             ...req.body
         };
 
-        if (data.itemId === undefined) {
-            return res.status(400).send("itemId must be required.");
+        
+        if (data.contentId === undefined) {
+
+            return res.status(400).send("contentId must be required.");
         }
-        if (!TypeChecker.isInteger(data.itemId)) {
-            return res.status(400).send("itemId must be integer.");
+        if (!TypeChecker.isInteger(data.contentId)) {
+            return res.status(400).send("contentId must be integer.");
         }
 
-        data.itemId = parseInt(data.itemId);
+        data.contentId = parseInt(data.contentId);
 
         try {
             const result = await TodoServices.deleteTodoItem(data);
