@@ -62,11 +62,21 @@ const myCors = ({ allowedOrigins, headers, methods, credentials }) => {
             throw (new Error('The second parameter must be response.'));
         }
 
-        if (!_allowedOrigins.includes(req.headers.origin)) {
-            return res.status(400).send(`Not accepted origin ${req.headers.origin}`);
-        }
+        if (req.headers.origin !== undefined) {
+            let num = 0;
 
-        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+            for (const allowedOrigin of _allowedOrigins) {
+                if (allowedOrigin.includes(req.headers.origin)) {
+                    break;
+                }
+            }
+
+            if (num === _allowedOrigins.length) {
+                return res.status(400).send(`Not accepted origin ${req.headers.origin}`);
+            }
+
+            res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+        }
 
         if (_headers !== null) {
             res.header('Access-Control-Allow-Headers', _headers);
