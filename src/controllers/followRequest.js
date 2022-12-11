@@ -4,6 +4,7 @@ import { TypeChecker } from '../utils/index.js';
 export default Object.freeze({
     createFollowRequest: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.body
         };
 
@@ -42,6 +43,7 @@ export default Object.freeze({
     },
     deleteFollowRequest: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.body
         };
 
@@ -76,6 +78,7 @@ export default Object.freeze({
     },
     deleteFollowRequested: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.body
         };
 

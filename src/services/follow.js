@@ -42,17 +42,35 @@ export default Object.freeze({
             return false;
         }
 
-        const bind = {
-            targetUserId: followerId,
-            userId: userId,
-        };
+        const bind = [
+            followerId,
+            userId,
+            {
+                dir: oracledb.BIND_OUT,
+                type: oracledb.NUMBER
+            },
+            {
+                dir: oracledb.BIND_OUT,
+                type: oracledb.NUMBER
+            },
+            {
+                dir: oracledb.BIND_OUT,
+                type: oracledb.NUMBER
+            },
+            {
+                dir: oracledb.BIND_OUT,
+                type: oracledb.NUMBER
+            }
+        ]
 
         const option = {
             autoCommit: true
         };
 
+        console.log(followerId, userId);
         try {
             const result = await oracleDbHelper.connection.execute(FollowQuery.createFollow, bind, option);
+            console.log(result);
             return { status: true};
         } catch (e) {
             console.log(e);

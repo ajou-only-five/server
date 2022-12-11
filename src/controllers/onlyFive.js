@@ -3,9 +3,13 @@ import { TypeChecker } from '../utils/index.js';
 
 export default Object.freeze({
     searchOnlyFiveByUserId: async (req, res, next) => {
-        const data = {
-            ...req.query
+        let data = {
+            userId: req.session.userId
         };
+        
+        if (req.query.userId !== null && req.query.userId !== undefined) {
+            data.userId = req.query.userId;
+        }
 
         if (data.userId === undefined) {
             return res.status(400).send("userId must be required.");
@@ -19,6 +23,7 @@ export default Object.freeze({
         try {
             const result = await OnlyFiveServices.searchOnlyFiveByUserId(data);
 
+            console.log(result);
 
             if (result.status) {
                 if (result.data.length === 0) {

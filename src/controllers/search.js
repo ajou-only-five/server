@@ -5,6 +5,7 @@ export default Object.freeze({
     // 친구 목록
     searchFriend: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.query
         };
 
@@ -99,6 +100,7 @@ export default Object.freeze({
     // 요청 받은 친구 목록
     searchFriendRequested: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.query
         };
 
@@ -191,6 +193,7 @@ export default Object.freeze({
     },
     searchNotFriend: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.query
         };
 

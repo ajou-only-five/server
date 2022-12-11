@@ -4,8 +4,11 @@ import { TypeChecker } from '../utils/index.js';
 export default Object.freeze({
     createTodoTitle: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.body
         };
+
+        console.log(data);
 
         if (data.userId === undefined) {
             return res.status(400).send("userId must be required.");
@@ -42,6 +45,7 @@ export default Object.freeze({
     },
     createTodoItem: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.body
         };
 
@@ -307,6 +311,7 @@ export default Object.freeze({
     },
     deleteTodoItem: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.body
         };
 

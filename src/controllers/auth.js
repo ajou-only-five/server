@@ -67,6 +67,8 @@ export default Object.freeze({
                         return res.status(400).send("wrong password")
                     }
 
+                    console.log(result.data);
+
                     req.session.userId = result.data.ID;
                     return await new Promise(async (resolve, reject) => {
                         await req.session.save(function(err) {
@@ -74,9 +76,6 @@ export default Object.freeze({
                                 reject(res.status(400).send("No user whose account is " + data.account));
                             }
 
-                            console.log('hello');
-                            console.log(req.session);
-                            console.log(req.sessionID);
                             resolve(res.status(200).send("Success to login"));
                         });
                     });

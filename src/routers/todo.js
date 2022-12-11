@@ -5,9 +5,11 @@ import { TodoController } from '../controllers/index.js';
 const router = express.Router();
 
 router.all('/*', (req, res, next) => {
+    console.log('todo');
     console.log(req.body);
     console.log(req.session);
     console.log(req.sessionID);
+
     if(!req.session.userId){
         return res.status(400).send("session is invalid")
     }

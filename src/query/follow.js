@@ -5,7 +5,7 @@ export default Object.freeze({
      */
     createFollow: `
     BEGIN 
-        CREATE_FRIEND(:targetUserId, :userId); 
+        CREATE_FRIEND(:targetUserId, :userId, :deleteTargerUserId, :deleteUserId, :followTargetUserId, :followUserId); 
     END;
         `,
     /**
