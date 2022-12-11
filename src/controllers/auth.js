@@ -39,12 +39,10 @@ export default Object.freeze({
           }
     },
     loginRequested: async(req,res,next)=>{
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
+
         if (data.account === undefined) {
             return res.status(400).send("account must be required.");
         }
@@ -57,17 +55,16 @@ export default Object.freeze({
         if (!TypeChecker.isString(data.password)) {
             return res.status(400).send("password must be string.");
         }
+
         try{
             let result = await UserServices.findUserByAccount(data)
             if(result.status){//정보가 있으면 세션에 저장.
               if(result.data.length!==0){ 
-                console.log(result.data)
-                if(!bcrypt.compareSync(data.password,result.data[0][2])){
+                if(!bcrypt.compareSync(data.password,result.data.PASSWORD)){
                   return res.status(400).send("wrong password")
                 }
-                req.session.account=data.account;
-                req.session.password=data.password;
-                req.session.userId=result.data[0];
+
+                req.session.userId=result.data.ID;
                 return res.status(200).send("Success to login")
               }
               return res.status(400).send("No user whose account is "+data.account)
@@ -79,9 +76,10 @@ export default Object.freeze({
           }
     },
     logoutRequested:async(req,res,next)=>{
-        if(!req.session.account){
+        if(!req.session.userId){
             return res.status(400).send("session is invalid")
         }
+
         try{
             await req.session.destroy(function(err){
             if(err){

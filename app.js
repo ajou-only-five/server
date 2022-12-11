@@ -65,7 +65,7 @@ app.use((req, res, next) => {
   res.status(404).send('Not Found');
 });
 
-app.listen(3003, function () {
+app.listen(3000, function () {
   console.log('Express server is listening');
 });
 
