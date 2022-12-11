@@ -15,6 +15,8 @@ import onlyFiveRouter from "./src/routers/onlyFive.js";
 import myInfoRouter from "./src/routers/myInfo.js";
 import authRouter from "./src/routers/auth.js";
 import validRouter from "./src/routers/valid.js";
+import sseRouter from './src/routers/sse.js';
+
 const app = express();
 
 app.use(logger("dev"));
@@ -60,12 +62,13 @@ app.use("/api/search", searchRouter);
 app.use('/api/onlyFive', onlyFiveRouter);
 app.use("/api/valid", validRouter);
 app.use("/api/auth", authRouter);
+app.use('/api/streaming', sseRouter);
 
 app.use((req, res, next) => {
   res.status(404).send('Not Found');
 });
 
-app.listen(3003, function () {
+app.listen(3000, function () {
   console.log('Express server is listening');
 });
 
