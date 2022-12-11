@@ -39,8 +39,8 @@ export default Object.freeze({
           }
     },
     loginRequested: async(req,res,next)=>{
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
+        if(req.session.account){
+            return res.status(200).send("session is already valid")
         }
         const data = {
             ...req.body
@@ -61,13 +61,13 @@ export default Object.freeze({
             let result = await UserServices.findUserByAccount(data)
             if(result.status){//정보가 있으면 세션에 저장.
               if(result.data.length!==0){ 
-                console.log(result.data)
-                if(!bcrypt.compareSync(data.password,result.data[0][2])){
+                console.log(result.data[0])
+                if(!bcrypt.compareSync(data.password,result.data[0].PASSWORD)){
                   return res.status(400).send("wrong password")
                 }
                 req.session.account=data.account;
                 req.session.password=data.password;
-                req.session.userId=result.data[0];
+                req.session.userId=result.data[0].ID;
                 return res.status(200).send("Success to login")
               }
               return res.status(400).send("No user whose account is "+data.account)
