@@ -3,13 +3,10 @@ import { TypeChecker } from '../utils/index.js';
 
 export default Object.freeze({
     createTodoTitle: async (req, res, next) => {
-<<<<<<< HEAD
         if(!req.session.account){
             return res.status(400).send("session is invalid")
         }
         console.log(req.body);
-=======
->>>>>>> 38109d1797fd6d9ec47b34f762f042bdd030db76
         const data = {
             ...req.body
         };
@@ -239,16 +236,11 @@ export default Object.freeze({
         const data = {
             ...req.body
         };
-<<<<<<< HEAD
-        if (data.itemId === undefined) {
-            return res.status(400).send("itemId must be required.");
-=======
 
         console.log(data.isChecked);
 
         if (data.contentId === undefined) {
             return res.status(400).send("contentId must be required.");
->>>>>>> 38109d1797fd6d9ec47b34f762f042bdd030db76
         }
         if (!TypeChecker.isInteger(data.contentId)) {
             return res.status(400).send("contentId must be integer.");
@@ -335,18 +327,12 @@ export default Object.freeze({
         }
         const data = {
             ...req.body
-<<<<<<< HEAD
-        };    
-        if (data.itemId === undefined) {
-            return res.status(400).send("itemId must be required.");
-=======
         };
 
         
         if (data.contentId === undefined) {
 
             return res.status(400).send("contentId must be required.");
->>>>>>> 38109d1797fd6d9ec47b34f762f042bdd030db76
         }
         if (!TypeChecker.isInteger(data.contentId)) {
             return res.status(400).send("contentId must be integer.");

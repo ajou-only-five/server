@@ -30,7 +30,7 @@ export default Object.freeze({
             return res.status(500).send("Server error.")
         }
     },
-    updatePassword:async(req,res,next)=>{
+    updateDisclosure:async(req,res,next)=>{
         if(!req.session.account){
             return res.status(400).send("session is invalid")
         }

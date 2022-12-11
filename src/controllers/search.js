@@ -99,14 +99,10 @@ export default Object.freeze({
         }
     },
     // 요청 받은 친구 목록
-<<<<<<< HEAD
-    searchFriendRequsted: async (req, res, next) => {
+    searchFriendRequested: async (req, res, next) => {
         if(!req.session.account){
             return res.status(400).send("session is invalid")
         }
-=======
-    searchFriendRequested: async (req, res, next) => {
->>>>>>> 38109d1797fd6d9ec47b34f762f042bdd030db76
         const data = {
             ...req.query
         };

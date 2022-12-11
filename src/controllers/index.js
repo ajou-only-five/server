@@ -14,5 +14,5 @@ export {
     OnlyFiveController,
     AuthController,
     ValidController,
-    MyInfoController
+    MyInfoController,
 };

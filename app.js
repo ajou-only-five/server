@@ -12,9 +12,9 @@ import followRouter from "./src/routers/follow.js";
 import followRequestRouter from "./src/routers/followRequest.js";
 import searchRouter from "./src/routers/search.js";
 import onlyFiveRouter from "./src/routers/onlyFive.js";
-import { myInfoRouter } from "./src/routers/myInfo.js";
-import { authRouter } from "./src/routers/auth.js";
-import { validRouter } from "./src/routers/valid.js";
+import myInfoRouter from "./src/routers/myInfo.js";
+import authRouter from "./src/routers/auth.js";
+import validRouter from "./src/routers/valid.js";
 const app = express();
 
 app.use(logger("dev"));
