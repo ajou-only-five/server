@@ -14,9 +14,10 @@ export default Object.freeze({
             return res.status(400).send("account must be string.");
         }
         try{
-            const result = await UserServices.findUserByAccount(data)
+            const result = await UserServices.findUserByAccount(data);
+
             if(result.status){
-              if(result.data.length===0){
+              if(result.data === undefined){
                 return res.status(200).send("No user whose account is " + data.account)
               }
               return res.status(400).send("A user with that account already exists.")
@@ -25,6 +26,7 @@ export default Object.freeze({
               return res.status(500).send("Server error.")
             }
           }catch(e){
+            console.log(e);
             return res.status(500).send("Server error.")
           }
     },
@@ -40,9 +42,10 @@ export default Object.freeze({
             return res.status(400).send("nickname must be string.");
         }
         try{
-            const result = await UserServices.findUserByNickname(data)
+            const result = await UserServices.findUserByNickname(data);
+
             if(result.status){
-              if(result.data.length===0){
+              if(result.data === undefined){
                 return res.status(200).send("No user whose nickname is " + data.nickname)
               }
               return res.status(400).send("A user with that nickname already exists.")

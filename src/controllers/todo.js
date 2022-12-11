@@ -94,6 +94,7 @@ export default Object.freeze({
     },
     searchTodoListInMonth: async (req, res, next) => {
         const data = {
+            userId: req.session.userId,
             ...req.query
         };
 

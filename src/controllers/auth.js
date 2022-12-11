@@ -3,11 +3,11 @@ import { TypeChecker } from '../utils/index.js';
 import bcrypt from "bcrypt";
 
 export default Object.freeze({
-    createUser: async(req,res,next)=>{
+    createUser: async (req, res, next) => {
         const data = {
             ...req.body,
-            profile:"default",
-            disclosure:0
+            profile: "default",
+            disclosure: 0
         };
         if (data.account === undefined) {
             return res.status(400).send("account must be required.");
@@ -27,18 +27,20 @@ export default Object.freeze({
         if (!TypeChecker.isString(data.nickname)) {
             return res.status(400).send("nickname must be string.");
         }
-        try{
+
+        try {
             const result = await UserServices.createUser(data);
 
-            if(result.status){
-              return res.status(200).send(result.data);
+            if (result.status) {
+                return res.status(200).send(result.data);
             }
             return res.status(500).send("Server error.")
-          }catch(e){
+        } catch (e) {
+            console.log(e);
             return res.status(500).send("Server error")
-          }
+        }
     },
-    loginRequested: async(req,res,next)=>{
+    loginRequested: async (req, res, next) => {
         const data = {
             ...req.body
         };
@@ -56,40 +58,53 @@ export default Object.freeze({
             return res.status(400).send("password must be string.");
         }
 
-        try{
-            let result = await UserServices.findUserByAccount(data)
-            if(result.status){//정보가 있으면 세션에 저장.
-              if(result.data.length!==0){ 
-                if(!bcrypt.compareSync(data.password,result.data.PASSWORD)){
-                  return res.status(400).send("wrong password")
-                }
+        try {
+            let result = await UserServices.findUserByAccount(data);
 
-                req.session.userId=result.data.ID;
-                return res.status(200).send("Success to login")
-              }
-              return res.status(400).send("No user whose account is "+data.account)
+            if (result.status) {//정보가 있으면 세션에 저장.
+                if(result.data !== undefined){
+                    if (!bcrypt.compareSync(data.password, result.data.PASSWORD)) {
+                        return res.status(400).send("wrong password")
+                    }
+
+                    req.session.userId = result.data.ID;
+                    return await new Promise(async (resolve, reject) => {
+                        await req.session.save(function(err) {
+                            if(err) {
+                                reject(res.status(400).send("No user whose account is " + data.account));
+                            }
+
+                            console.log('hello');
+                            console.log(req.session);
+                            console.log(req.sessionID);
+                            resolve(res.status(200).send("Success to login"));
+                        });
+                    });
+                }
             }
+
             return res.status(500).send("Server error.")
-          }catch(err){
+        } catch (err) {
             console.log(err);
             return res.status(500).send("Server error.")
-          }
+        }
     },
-    logoutRequested:async(req,res,next)=>{
-        if(!req.session.userId){
+    logoutRequested: async (req, res, next) => {
+        if (!req.session.userId) {
             return res.status(400).send("session is invalid")
         }
 
-        try{
-            await req.session.destroy(function(err){
-            if(err){
-                return res.status(500).send("Fail to logout");
-            }
-            else{
-                return res.status(200).send("Success to logout.")
-            }
-            }) 
-        }catch(err){
+        try {
+            await req.session.destroy(function (err) {
+                if (err) {
+                    return res.status(500).send("Fail to logout");
+                }
+                else {
+                    return res.status(200).send("Success to logout.")
+                }
+            })
+        } catch (err) {
+            console.log(err);
             res.status(500).send("Server error.")
         }
     }

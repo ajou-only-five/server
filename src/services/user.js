@@ -91,7 +91,120 @@ export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data - 유저 데이터
-     * @property { String } userId - data.userId, 유저 id
+     * @property { String } account - data.account, 유저 id
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<any> } data
+     * 
+     * @description 
+     * 유저를 1명 찾을 때 사용하는 함수입니다.
+     * ```js
+     * // 유저를 찾았을 때
+     * { 
+     *      status : true,
+     *      data: [
+     *          0, // id
+     *          "testAccount", // account
+     *          "test@123", // password
+     *          "testNickname", // nickname
+     *          "testProfile", // profile
+     *          0, // disclosure
+     *          16908743092814, // create_at, timestamp 형식
+     *          16908743092814 // update_at, timestamp 형식
+     *      ]
+     * } 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 유저 검색이 완료되지 않았을 경우
+     * // 해당 정보가 DB에 저장되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+    findUserByAccount: async ({ account }) => {
+        if (!TypeChecker.isString(account)) {
+            return { status: false };
+        }
+
+        const bind = [
+            account,
+        ];
+
+        const option = {
+            outFormat: oracledb.OUT_FORMAT_OBJECT
+        };
+
+        try {
+            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind, option);
+
+            if(result.rows.length === 0) {
+                return { status: true };
+            }
+            return { status: true, data: result.rows[0]};
+        } catch (e) {
+            throw new Error({ status: false, error: e });
+        }
+    },
+     /**
+     * @namedparam
+     * @param { Object } data - 유저 데이터
+     * @property { String } nickname - data.nickname, 유저 nickname
+     * 
+     * @return { Object } 
+     * @property { Boolean } status
+     * @property { Array<any> } data
+     * 
+     * @description 
+     * 유저를 1명 찾을 때 사용하는 함수입니다.
+     * ```js
+     * // 유저를 찾았을 때
+     * { 
+     *      status : true,
+     *      data: [
+     *          0, // id
+     *          "testAccount", // account
+     *          "test@123", // password
+     *          "testNickname", // nickname
+     *          "testProfile", // profile
+     *          0, // disclosure
+     *          16908743092814, // create_at, timestamp 형식
+     *          16908743092814 // update_at, timestamp 형식
+     *      ]
+     * } 
+     * 
+     * // parameter 타입이 맞지 않을 경우
+     * // 유저 검색이 완료되지 않았을 경우
+     * // 해당 정보가 DB에 저장되지 않았을 경우
+     * { status : false }
+     * ```
+     */
+     findUserByNickname: async ({ nickname }) => {
+        if (!TypeChecker.isString(nickname)) {
+            return { status: false };
+        }
+
+        const bind = [
+            nickname,
+        ];
+
+        const option = {
+            outFormat: oracledb.OUT_FORMAT_OBJECT
+        };
+
+        try {
+            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByNickname, bind, option);
+            if(result.rows.length === 0) {
+                return { status: true };
+            }
+            return { status: true, data: result.rows[0]};
+        } catch (e) {
+            throw new Error({ status: false, error: e });
+        }
+    },
+    /**
+     * @namedparam
+     * @param { Object } data - 유저 데이터
+     * @property { Number } userId - data.userId, 유저 id
      * 
      * @return { Object } 
      * @property { Boolean } status
@@ -136,10 +249,13 @@ export default Object.freeze({
 
         try {
             const result = await oracleDbHelper.connection.execute(UserQuery.findUserByUserId, bind, option);
+            if(result.rows.length === 0) {
+                return { status: true };
+            }
             return { status: true, data: result.rows[0]};
         } catch (e) {
             console.log(e);
-            return { status: false };
+            throw new Error({ status: false, error: e });
         }
     },
     /**

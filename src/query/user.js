@@ -4,6 +4,8 @@ export default Object.freeze({
         VALUES (user_pk_seq.NEXTVAL, :2, :3, :4, :5, :6, :7, :8)
         RETURNING id into :id
         `,
+    findUserByAccount: `SELECT id, account, password, nickname, profile, disclosure FROM USERS WHERE account = :account`,
+    findUserByNickname: `SELECT nickname FROM USERS WHERE nickname = :nickname`,
     findUserByUserId: `SELECT * FROM USERS WHERE id = :userId`,
     searchUsersByNickname: ({nickname}) => `
         SELECT id, account, nickname, profile, disclosure 
