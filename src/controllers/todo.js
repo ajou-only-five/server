@@ -3,10 +3,13 @@ import { TypeChecker } from '../utils/index.js';
 
 export default Object.freeze({
     createTodoTitle: async (req, res, next) => {
+<<<<<<< HEAD
         if(!req.session.account){
             return res.status(400).send("session is invalid")
         }
         console.log(req.body);
+=======
+>>>>>>> 38109d1797fd6d9ec47b34f762f042bdd030db76
         const data = {
             ...req.body
         };
@@ -138,22 +141,46 @@ export default Object.freeze({
                 let todoAllList = [];
 
                 result.data.forEach((todo) => {
-                    for (const todoTitle of todoAllList) {
-                        if (todo.titleId === todoTitle.titleId) {
-                            todoTitle.todoItemList.push({
-                                content: todo.content,
-                                startAt: todo.startAt,
-                                endAt: todo.endAt,
-                                isChecked: todo.isChecked,
+                    const todoTitle = todoAllList.find((element) => element.titleId === todo.TITLE_ID);
+
+                    if (todoTitle === undefined) {
+                        if(todo.CONTENT_ID === undefined || todo.CONTENT_ID === null) {
+                            todoAllList.push({
+                                titleId: todo.TITLE_ID,
+                                title: todo.TITLE,
+                                color: todo.COLOR,
+                                todoItemList: [],
                             });
                             return;
                         }
+
+                        todoAllList.push({
+                            titleId: todo.TITLE_ID,
+                            title: todo.TITLE,
+                            color: todo.COLOR,
+                            todoItemList: [{
+                                contentId: todo.CONTENT_ID,
+                                content: todo.CONTENT,
+                                startAt: todo.START_AT,
+                                endAt: todo.END_AT,
+                                isChecked: todo.IS_CHECKED,
+                                titleId: todo.TITLE_ID
+                            }],
+                        });
+                        return;
                     }
 
-                    todoAllList.push({
-                        titleId: todo.titleId,
-                        title: todo.title,
-                        todoItemList: [],
+                    if(todo.CONTENT_ID === undefined || todo.CONTENT_ID === null) {
+                        return;
+                    }
+                    
+                    todoTitle.todoItemList.push({
+                        contentId: todo.CONTENT_ID,
+                        content: todo.CONTENT,
+                        startAt: todo.START_AT,
+                        endAt: todo.END_AT,
+                        isChecked: todo.IS_CHECKED,
+                        titleId: todo.TITLE_ID
                     });
                 });
 
@@ -212,11 +239,19 @@ export default Object.freeze({
         const data = {
             ...req.body
         };
+<<<<<<< HEAD
         if (data.itemId === undefined) {
             return res.status(400).send("itemId must be required.");
+=======
+
+        console.log(data.isChecked);
+
+        if (data.contentId === undefined) {
+            return res.status(400).send("contentId must be required.");
+>>>>>>> 38109d1797fd6d9ec47b34f762f042bdd030db76
         }
-        if (!TypeChecker.isInteger(data.itemId)) {
-            return res.status(400).send("itemId must be integer.");
+        if (!TypeChecker.isInteger(data.contentId)) {
+            return res.status(400).send("contentId must be integer.");
         }
         if (data.content === undefined) {
             return res.status(400).send("contenst must be required.");
@@ -227,7 +262,8 @@ export default Object.freeze({
         if (data.isChecked === undefined) {
             return res.status(400).send("isChecked must be required.");
         }
-        if (data.isChecked === 0 || data.isChecked === 1) {
+        if (data.isChecked !== 0 && data.isChecked !== 1) {
+            console.log(data.isChecked);
             return res.status(400).send("isChecked must be 0 or 1.");
         }
 
@@ -251,7 +287,7 @@ export default Object.freeze({
             data.endAt = endAt;
         }
 
-        data.itemId = parseInt(data.isChecked);
+        data.contentId = parseInt(data.contentId);
 
         try {
             const result = await TodoServices.updateTodoItemByItemId(data);
@@ -299,15 +335,24 @@ export default Object.freeze({
         }
         const data = {
             ...req.body
+<<<<<<< HEAD
         };    
         if (data.itemId === undefined) {
             return res.status(400).send("itemId must be required.");
+=======
+        };
+
+        
+        if (data.contentId === undefined) {
+
+            return res.status(400).send("contentId must be required.");
+>>>>>>> 38109d1797fd6d9ec47b34f762f042bdd030db76
         }
-        if (!TypeChecker.isInteger(data.itemId)) {
-            return res.status(400).send("itemId must be integer.");
+        if (!TypeChecker.isInteger(data.contentId)) {
+            return res.status(400).send("contentId must be integer.");
         }
 
-        data.itemId = parseInt(data.itemId);
+        data.contentId = parseInt(data.contentId);
 
         try {
             const result = await TodoServices.deleteTodoItem(data);

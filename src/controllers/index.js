@@ -1,15 +1,17 @@
 import TodoController from './todo.js';
-import FriendRequestController from './friendRequest.js';
-import FriendController from './friend.js';
+import FollowRequestController from './followRequest.js';
+import FollowController from './follow.js';
 import SearchController from './search.js';
-import AuthController from './auth.js';
+import OnlyFiveController from './onlyFive.js';
+import AuthController from './auth.js'
 import ValidController from './valid.js'
-import MyInfoController from './myInfo.js';
+import MyInfoController from './myInfo.js'
 export {
     TodoController,
-    FriendRequestController,
-    FriendController,
+    FollowRequestController,
+    FollowController,
     SearchController,
+    OnlyFiveController,
     AuthController,
     ValidController,
     MyInfoController
