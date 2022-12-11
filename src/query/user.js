@@ -4,8 +4,7 @@ export default Object.freeze({
         VALUES (user_pk_seq.NEXTVAL, :2, :3, :4, :5, :6, :7, :8)
         RETURNING id into :id
         `,
-    findUserByAccount: `SELECT * FROM USERS WHERE account = :account ORDER BY nickname`,
-    findUserByNickname: `SELECT * FROM USERS WHERE nickname = :nickname ORDER BY nickname`,
+    findUserByUserId: `SELECT * FROM USERS WHERE id = :userId`,
     searchUsersByNickname: ({nickname}) => `
         SELECT id, account, nickname, profile, disclosure 
         FROM USERS 
@@ -21,10 +20,9 @@ export default Object.freeze({
         ) WHERE NUM BETWEEN ${start} AND ${end}
         ORDER BY nickname ASC, id ASC
         `,
-    updatePasswordByAccount: `UPDATE USERS SET password = :password, update_at = :update_at WHERE account = :account`, 
-    updateNicknameByAccount: `UPDATE USERS SET nickname = :nickname, update_at = :update_at WHERE account = :account`, 
-    updateProfileByAccount: `UPDATE USERS SET profile = :profile, update_at = :update_at WHERE account = :account`,
-    updateDisclosureByAccount: `UPDATE USERS SET disclosure = :disclosure, update_at = :update_at WHERE account = :account`,
-    deleteUserByAccount: `DELETE FROM USERS WHERE account = :account`, 
-    deleteUserByNickname: `DELETE FROM USERS WHERE nickname = :nickname`, 
+    updatePasswordByUserId: `UPDATE USERS SET password = :password, update_at = :update_at WHERE id = :userId`, 
+    updateNicknameByUserId: `UPDATE USERS SET nickname = :nickname, update_at = :update_at WHERE id = :userId`, 
+    updateProfileByUserId: `UPDATE USERS SET profile = :profile, update_at = :update_at WHERE id = :userId`, 
+    updateDisclosureUserId: `UPDATE USERS SET disclosure = :disclosure, update_at = :update_at WHERE id = :userId`, 
+    deleteUserByUserId: `DELETE FROM USERS WHERE id = :userId`, 
 });

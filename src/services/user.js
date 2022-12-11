@@ -91,7 +91,7 @@ export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data - 유저 데이터
-     * @property { String } account - data.account, 유저 계정
+     * @property { String } userId - data.userId, 유저 id
      * 
      * @return { Object } 
      * @property { Boolean } status
@@ -121,13 +121,13 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    findUserByAccount: async ({ account }) => {
-        if (!TypeChecker.isString(account)) {
+    findUserByUserId: async ({ userId }) => {
+        if (!TypeChecker.isInteger(userId)) {
             return { status: false };
         }
 
         const bind = [
-            account,
+            userId,
         ];
 
         const option = {
@@ -135,62 +135,8 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind, option);
-            return { status: true, data: result.rows};
-        } catch (e) {
-            console.log(e);
-            return { status: false };
-        }
-    },
-    /**
-     * @namedparam
-     * @param { Object } data - 유저 데이터
-     * @property { String } nickname - data.nickname, 유저 닉네임
-     * 
-     * @return { Object } 
-     * @property { Boolean } status
-     * @property { Array<any> } data
-     * 
-     * @description
-     * 유저를 1명 찾을 때 사용하는 함수입니다.
-     * ```js
-     * // 유저를 찾았을 때
-     * { 
-     *      status : true,
-     *      data: [
-     *          0, // id
-     *          "testAccount", // account
-     *          "test@123", // password
-     *          "testNickname", // nickname
-     *          "testProfile", // profile
-     *          0, // disclosure
-     *          16908743092814, // create_at, timestamp 형식
-     *          16908743092814 // update_at, timestamp 형식
-     *      ]
-     * } 
-     * 
-     * // parameter 타입이 맞지 않을 경우
-     * // 유저 검색이 완료되지 않았을 경우
-     * // 해당 정보가 DB에 저장되지 않았을 경우
-     * { status : false }
-     * ```
-     */
-    findUserByNickname: async ({ nickname }) => {
-        if (!TypeChecker.isString(nickname)) {
-            return { status: false };
-        }
-
-        const bind = [
-            nickname,
-        ];
-        
-        const option = {
-            outFormat: oracledb.OUT_FORMAT_OBJECT
-        };
-
-        try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByAccount, bind, option);
-            return { status: true, data: result.rows };
+            const result = await oracleDbHelper.connection.execute(UserQuery.findUserByUserId, bind, option);
+            return { status: true, data: result.rows[0]};
         } catch (e) {
             console.log(e);
             return { status: false };
@@ -364,10 +310,10 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    updatePasswordByAccount: async ({ account, password }) => {
+    updatePasswordByUserId: async ({ userId, password }) => {
         const typeCheckData = [
-            [account, password],
-            ['string', 'string']
+            [userId, password],
+            ['number', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -392,7 +338,7 @@ export default Object.freeze({
         const bind = [
             _hashedPassword,
             new Date(Date.now()),
-            account,
+            userId,
         ];
 
         const option = {
@@ -400,7 +346,7 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updatePasswordByAccount, bind, option);
+            const result = await oracleDbHelper.connection.execute(UserQuery.updatePasswordByUserId, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -410,7 +356,7 @@ export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data - 유저 데이터
-     * @property { String } account - data.account, 유저 계정
+     * @property { String } userId - data.userId, 유저 계정
      * @property { String } nickname - data.nickname, 유저 닉네임
      * 
      * @return { Object } 
@@ -429,10 +375,10 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    updateNicknameByAccount: async ({ account, nickname }) => {
+    updateNicknameByUserId: async ({ userId, nickname }) => {
         const typeCheckData = [
-            [account, nickname],
-            ['string', 'string']
+            [userId, nickname],
+            ['number', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -444,7 +390,7 @@ export default Object.freeze({
         const bind = [
             nickname,
             new Date(Date.now()),
-            account,
+            userId,
         ];
 
         const option = {
@@ -452,7 +398,7 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updateNicknameByAccount, bind, option);
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateNicknameByUserId, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -462,7 +408,7 @@ export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data - 유저 데이터
-     * @property { String } account - data.account, 유저 계정
+     * @property { Number } userId - data.userId, 유저 계정
      * @property { String } profile - data.profile, 유저 프로필
      * 
      * @return { Object } 
@@ -481,10 +427,10 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    updateProfileByAccount: async ({ account, profile }) => {
+    updateProfileByUserId: async ({ userId, profile }) => {
         const typeCheckData = [
-            [account, profile],
-            ['string', 'string']
+            [userId, profile],
+            ['numbre', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -498,7 +444,7 @@ export default Object.freeze({
             profile,
             disclosure,
             new Date(Date.now()),
-            account,
+            userId,
         ];
 
         const option = {
@@ -506,8 +452,7 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updateUserByAccount, bind, option);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateProfileByUserId, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -517,7 +462,7 @@ export default Object.freeze({
     /**
      * @namedparam
      * @param { Object } data - 유저 데이터
-     * @property { String } account - data.account, 유저 계정
+     * @property { Number } userId - data.userId, 유저 id
      * @property { Number } disclosure - data.disclosure, 유저 프로필
      * 
      * @return { Object } 
@@ -536,10 +481,10 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    updateDisclosureByAccount: async ({ account, disclosure }) => {
+    updateDisclosureByUserId: async ({ userId, disclosure }) => {
         const typeCheckData = [
-            [account, disclosure],
-            ['string', 'string']
+            [userId, disclosure],
+            ['number', 'string']
         ];
 
         const typeCheckResult = TypeChecker.typeCheckAll({ objectList: typeCheckData[0], typeList: typeCheckData[1] });
@@ -551,7 +496,7 @@ export default Object.freeze({
         const bind = [
             disclosure,
             new Date(Date.now()),
-            account,
+            userId,
         ];
 
         const option = {
@@ -559,8 +504,7 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.updateDisclosureByAccount, bind, option);
-            await oracleDbHelper.connection.commit();
+            const result = await oracleDbHelper.connection.execute(UserQuery.updateDisclosureUserId, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);
@@ -589,13 +533,13 @@ export default Object.freeze({
      * { status : false }
      * ```
      */
-    deleteUserByAccount: async ({ account }) => {
-        if (!TypeChecker.isString(account)) {
+    deleteUserByUserId: async ({ userId }) => {
+        if (!TypeChecker.isString(userId)) {
             return { status: false };
         }
 
         const bind = [
-            account
+            userId
         ];
 
         const option = {
@@ -603,50 +547,7 @@ export default Object.freeze({
         };
 
         try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.deleteUserByAccount, bind, option);
-            return { status: true, data: result };
-        } catch (e) {
-            console.log(e);
-            return { status: false };
-        }
-    },
-    /**
-     * @namedparam
-     * @param { Object } data - 유저 데이터
-     * @property { String } nickname - data.nickname, 유저 닉네임
-     * 
-     * @return { Object } 
-     * @property { Boolean } status
-     * 
-     * @description
-     * 
-     * 해당 계정을 가지고 있는 유저의 정보를 삭제 합니다.
-     * 
-     * ```js
-     * // 해당 유저의 정보를 삭제 하고, 해당 정보를 DB에 저장했을 경우
-     * { status : true }
-     * 
-     * // parameter 타입이 맞지 않을 경우
-     * // 유저 삭제가 완료되지 않았을 경우
-     * // 해당 정보가 DB에 저장되지 않았을 경우
-     * { status : false }
-     * ```
-     */
-    deleteUserByNickname: async ({ nickname }) => {
-        if (!TypeChecker.isString(nickname)) {
-            return { status: false };
-        }
-
-        const bind = [
-            nickname,
-        ];
-
-        const option = {
-            autoCommit: true
-        };
-
-        try {
-            const result = await oracleDbHelper.connection.execute(UserQuery.deleteUserByNickname, bind, option);
+            const result = await oracleDbHelper.connection.execute(UserQuery.deleteUserByUserId, bind, option);
             return { status: true, data: result };
         } catch (e) {
             console.log(e);

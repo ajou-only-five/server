@@ -3,12 +3,10 @@ import { TypeChecker } from '../utils/index.js';
 
 export default Object.freeze({
     checkAccountExist: async(req,res,next)=>{
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
+
         if (data.account === undefined) {
             return res.status(400).send("account must be required.");
         }
@@ -31,12 +29,10 @@ export default Object.freeze({
           }
     },
     checkNicknameExist:async(req,res,next)=>{
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
+
         if (data.nickname === undefined) {
             return res.status(400).send("nickname must be required.");
         }

@@ -3,13 +3,10 @@ import { TypeChecker } from '../utils/index.js';
 
 export default Object.freeze({
     createTodoTitle: async (req, res, next) => {
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
-        console.log(req.body);
         const data = {
             ...req.body
         };
+
         if (data.userId === undefined) {
             return res.status(400).send("userId must be required.");
         }
@@ -44,12 +41,10 @@ export default Object.freeze({
         }
     },
     createTodoItem: async (req, res, next) => {
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
+
         if (data.titleId === undefined) {
             return res.status(400).send("titleId must be required.");
         }
@@ -98,12 +93,10 @@ export default Object.freeze({
         }
     },
     searchTodoListInMonth: async (req, res, next) => {
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.query
         };
+
         if (data.userId === undefined) {
             return res.status(400).send("userId must be required.");
         }
@@ -190,9 +183,6 @@ export default Object.freeze({
         }
     },
     updateTodoTitle: async (req, res, next) => {
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
@@ -230,14 +220,9 @@ export default Object.freeze({
         }
     },
     updateTodoItem: async (req, res, next) => {
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
-
-        console.log(data.isChecked);
 
         if (data.contentId === undefined) {
             return res.status(400).send("contentId must be required.");
@@ -294,12 +279,10 @@ export default Object.freeze({
         }
     },
     deleteTodoTitle: async (req, res, next) => {
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
+
         if (data.titleId === undefined) {
             return res.status(400).send("titleId must be required.");
         }
@@ -322,9 +305,6 @@ export default Object.freeze({
         }
     },
     deleteTodoItem: async (req, res, next) => {
-        if(!req.session.account){
-            return res.status(400).send("session is invalid")
-        }
         const data = {
             ...req.body
         };
